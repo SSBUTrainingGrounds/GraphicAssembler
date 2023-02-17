@@ -1,4 +1,5 @@
 from PyQt6.QtWidgets import QPushButton
+from graphics.app.generate import generate_thumbnail
 
 
 class CreateButton(QPushButton):
@@ -9,4 +10,4 @@ class CreateButton(QPushButton):
         self.clicked.connect(self.button_handler)
 
     def button_handler(self):
-        print("test")
+        generate_thumbnail("tos")
