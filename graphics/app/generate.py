@@ -1,13 +1,18 @@
 import os
-from graphics.definitions import THUMBNAIL_DIR, RENDERS_DIR, OUTPUT_DIR, FONTS_DIR
 
 # Import ImageFont for Fonts
 from PIL import Image, ImageDraw, ImageFont
 
+from graphics.definitions import (FONTS_DIR, OUTPUT_DIR, RENDERS_DIR,
+                                  THUMBNAIL_DIR)
 
 SIZE = (1920, 1080)
 CHARACTER_BOX = (960, 800)
 POSITION = [(0, 140), (960, 140)]
+
+
+def get_character_path(character: str, alt: str = "01") -> str:
+    return os.path.join(RENDERS_DIR, f"{character}/{alt}.png")
 
 
 def crop_character(image, crop):
@@ -44,7 +49,7 @@ def draw_thumbnail_text(text: str, into, center):
     into.alpha_composite(img, (center[0] - (wi // multiple // 2), center[1] + (hi // multiple // 2)))
 
 
-def generate_thumbnail(tournament):
+def generate_thumbnail(tournament, character_one: str, character_two: str, alt_one: str = "01", alt_two: str = "01"):
 
     canvas = Image.new('RGBA', SIZE)
 
@@ -58,8 +63,7 @@ def generate_thumbnail(tournament):
     tournament_path = os.path.join(THUMBNAIL_DIR, tournament)
     character_background_path = os.path.join(tournament_path, "Thumbnail-CharacterBackground.png")
     text_background_path = os.path.join(tournament_path, "Thumbnail-TextBackground.png")
-    character_paths = [os.path.join(RENDERS_DIR, "02-Donkey Kong\\01.png"),
-                       os.path.join(RENDERS_DIR, "01-Mario\\01.png")]
+    character_paths = [get_character_path(character_one, alt_one), get_character_path(character_two, alt_two)]
 
     # Background
     background = Image.open(background_path, mode="r")
