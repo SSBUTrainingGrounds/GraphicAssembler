@@ -15,7 +15,7 @@ def get_character_path(character: str, alt: str = "01") -> str:
     return os.path.join(RENDERS_DIR, f"{character}/{alt}.png")
 
 
-def crop_character(image, crop):
+def crop_character(image, crop) -> Image:
     img_width, img_height = image.size
     return image.crop(((img_width - crop[0]) // 2,
                        (img_height - crop[1]) // 2,
@@ -23,7 +23,7 @@ def crop_character(image, crop):
                        (img_height + crop[1]) // 2))
 
 
-def resize_character(image):
+def resize_character(image) -> Image:
     width_one, height_one = image.size
     if width_one > 960:
         factor = 960 / width_one
