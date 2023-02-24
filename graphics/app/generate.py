@@ -14,6 +14,9 @@ POSITION = [(0, 140), (960, 140)]
 def get_character_path(character: str, alt: str = "01") -> str:
     if character.lower() == "random":
         return os.path.join(RENDERS_DIR, "Random/Random.png")
+    # The Mii Fighters only have one alt.
+    if "mii" in character.lower():
+        alt = "01"
 
     return os.path.join(RENDERS_DIR, f"{character}/{alt}.png")
 
