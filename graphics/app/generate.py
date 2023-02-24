@@ -44,7 +44,7 @@ def draw_thumbnail_text(text: str, into, center):
 
     img = Image.new('RGBA', (wi, hi), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    draw.text((wi/2, hi/2), text, (255, 255, 255), syncopate, anchor="mm")
+    draw.text((wi / 2, hi / 2), text, (255, 255, 255), syncopate, anchor="mm")
 
     img = img.rotate(1.58, expand=True)
     img = img.resize((wi // multiple, hi // multiple), resample=Image.ANTIALIAS)
@@ -52,8 +52,7 @@ def draw_thumbnail_text(text: str, into, center):
     into.alpha_composite(img, (center[0] - (wi // multiple // 2), center[1] + (hi // multiple // 2)))
 
 
-def generate_thumbnail(tournament, character_one: str, character_two: str, alt_one: str = "01", alt_two: str = "01"):
-
+def generate_thumbnail(data):
     canvas = Image.new('RGBA', SIZE)
 
     # Output Path
@@ -63,10 +62,11 @@ def generate_thumbnail(tournament, character_one: str, character_two: str, alt_o
     # Paths to Template Items
     background_path = os.path.join(THUMBNAIL_DIR, "Thumbnail-Background.png")
     vs_path = os.path.join(THUMBNAIL_DIR, "Thumbnail-VS-01.png")
-    tournament_path = os.path.join(THUMBNAIL_DIR, tournament)
+    tournament_path = os.path.join(THUMBNAIL_DIR, data["tournament"])
     character_background_path = os.path.join(tournament_path, "Thumbnail-CharacterBackground.png")
     text_background_path = os.path.join(tournament_path, "Thumbnail-TextBackground.png")
-    character_paths = [get_character_path(character_one, alt_one), get_character_path(character_two, alt_two)]
+    character_paths = [get_character_path(data["players"][0]["character"], data["players"][0]["alt"]),
+                       get_character_path(data["players"][1]["character"], data["players"][1]["alt"])]
 
     # Background
     background = Image.open(background_path, mode="r")

@@ -12,17 +12,29 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("TG Graphics")
         self.resize(400, 300)
 
-        character_dropdown_one = CharacterDropdown()
-        character_dropdown_two = CharacterDropdown()
-        alt_dropdown_one = AltDropdown()
-        alt_dropdown_two = AltDropdown()
+        data = {
+            "players": [{
+                "tag": "",
+                "character": "",
+                "alt": "",
+            }, {
+                "tag": "",
+                "character": "",
+                "alt": "",
+            }],
+            "tournament": "tos",
+            "round": "",
+        }
 
-        button = CreateButton(
-            character_dropdown_one,
-            character_dropdown_two,
-            alt_dropdown_one,
-            alt_dropdown_two,
-        )
+        player_one = data["players"][0]
+        player_two = data["players"][1]
+
+        character_dropdown_one = CharacterDropdown(player_one)
+        character_dropdown_two = CharacterDropdown(player_two)
+        alt_dropdown_one = AltDropdown(player_one)
+        alt_dropdown_two = AltDropdown(player_two)
+
+        button = CreateButton(data)
 
         layout = QHBoxLayout()
 

@@ -8,7 +8,13 @@ def get_characters() -> list[str]:
 
 
 class CharacterDropdown(QComboBox):
-    def __init__(self):
+    def __init__(self, player_data):
         super().__init__()
 
+        self.player_data = player_data
         self.addItems(get_characters())
+        self.player_data["character"] = self.currentText()
+        self.currentTextChanged.connect(self.get_selection)
+
+    def get_selection(self, text):
+        self.player_data["character"] = text
