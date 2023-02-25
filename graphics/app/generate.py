@@ -98,8 +98,8 @@ def generate_thumbnail(data) -> Image:
     canvas.alpha_composite(vs)
 
     # Text
-    draw_thumbnail_text("NIFARES", canvas, (480, 56))
-    draw_thumbnail_text("PARZ", canvas, (1440, 56))
+    draw_thumbnail_text(data["players"][0]["tag"], canvas, (480, 56))
+    draw_thumbnail_text(data["players"][1]["tag"], canvas, (1440, 56))
     draw_thumbnail_text("GRAND FINALS", canvas, (480, 850))
 
     return canvas

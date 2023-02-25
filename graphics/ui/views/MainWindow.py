@@ -4,6 +4,7 @@ from graphics.ui.widgets.AltDropdown import AltDropdown
 from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
 from graphics.ui.widgets.CreateButton import CreateButton
 from graphics.ui.widgets.ImagePreview import ImagePreview
+from graphics.ui.widgets.PlayerTag import PlayerTag
 
 
 class MainWindow(QMainWindow):
@@ -20,12 +21,12 @@ class MainWindow(QMainWindow):
         data = {
             "players": [
                 {
-                    "tag": "",
+                    "tag": "NIFARES",
                     "character": "",
                     "alt": "",
                 },
                 {
-                    "tag": "",
+                    "tag": "PARZ",
                     "character": "",
                     "alt": "",
                 },
@@ -43,16 +44,22 @@ class MainWindow(QMainWindow):
         alt_dropdown_one = AltDropdown(player_one)
         alt_dropdown_two = AltDropdown(player_two)
 
+        player_tag_one = PlayerTag(player_one)
+        player_tag_two = PlayerTag(player_two)
+
         preview = ImagePreview(data)
 
         button = CreateButton(data)
 
-        self.grid.addWidget(character_dropdown_one, 0, 0)
-        self.grid.addWidget(alt_dropdown_one, 0, 1)
-        self.grid.addWidget(preview, 1, 0, 1, 4)
+        self.grid.addWidget(player_tag_one, 0, 0)
+        self.grid.addWidget(character_dropdown_one, 0, 1)
+        self.grid.addWidget(alt_dropdown_one, 0, 2)
 
-        self.grid.addWidget(character_dropdown_two, 0, 2)
-        self.grid.addWidget(alt_dropdown_two, 0, 3)
+        self.grid.addWidget(player_tag_two, 0, 3)
+        self.grid.addWidget(character_dropdown_two, 0, 4)
+        self.grid.addWidget(alt_dropdown_two, 0, 5)
+
+        self.grid.addWidget(preview, 1, 0, 1, 6)
 
         character_dropdown_one.currentTextChanged.connect(lambda: preview.update())
         character_dropdown_two.currentTextChanged.connect(lambda: preview.update())
@@ -60,7 +67,10 @@ class MainWindow(QMainWindow):
         alt_dropdown_one.currentTextChanged.connect(lambda: preview.update())
         alt_dropdown_two.currentTextChanged.connect(lambda: preview.update())
 
-        self.grid.addWidget(button, 0, 4)
+        player_tag_one.textChanged.connect(lambda: preview.update())
+        player_tag_two.textChanged.connect(lambda: preview.update())
+
+        self.grid.addWidget(button, 0, 6)
 
         widget = QWidget()
 
