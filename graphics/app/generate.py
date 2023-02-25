@@ -23,10 +23,11 @@ def get_character_path(character: str, alt: str = "01") -> str:
 
 def crop_character(image: Image, crop: tuple[int, int]) -> Image:
     img_width, img_height = image.size
+    # Crop from the Top of the Image to not cut off Face
     return image.crop(((img_width - crop[0]) // 2,
-                       (img_height - crop[1]) // 2,
+                       0,
                        (img_width + crop[0]) // 2,
-                       (img_height + crop[1]) // 2))
+                       crop[1]))
 
 
 def resize_character(image: Image) -> Image:
@@ -45,35 +46,59 @@ def generate_character_image(path: str) -> Image:
     return character
 
 
+def biggest_font_size(text: str, font_path, box_size, guess) -> ImageFont:
+    font = ImageFont.truetype(font_path, guess)
+    while (font.getsize(text)[0] > box_size[0]) or (font.getsize(text)[1] > box_size[1]):
+        guess -= 1
+        font = ImageFont.truetype(font_path, guess)
+
+    return font
+
+
 def draw_thumbnail_text(text: str, into: Image, center: tuple[int, int]):
+
+    # multiple is added because rotating causes image to become jagged
+    # sizing it down with the Image.ANTIALIAS flag smooths it out
     multiple = 3
 
-    # TODO: Make function that determines max size for font based on length of input str
-    syncopate = ImageFont.truetype(os.path.join(FONTS_DIR, 'Syncopate-Bold.ttf'), 120 * multiple)
-    wi, hi = syncopate.getsize(text)
+    syncopate = biggest_font_size(text, os.path.join(FONTS_DIR, 'Syncopate-Bold.ttf'), (930 * multiple, 120 * multiple),
+                                  130 * multiple)
 
-    img = Image.new('RGBA', (wi, hi), (0, 0, 0, 0))
+    width, height = syncopate.getsize(text)
+    img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    draw.text((wi / 2, hi / 2), text, (255, 255, 255), syncopate, anchor="mm")
+    draw.text((0, 0), text, (255, 255, 255), syncopate)
+    _, h = draw.textsize(text, font=syncopate)
+    h = h // multiple
 
-    img = img.rotate(1.58, expand=True)
-    img = img.resize((wi // multiple, hi // multiple), resample=Image.ANTIALIAS)
+    img = img.rotate(1.6, expand=True)
+    width = img.size[0] // multiple
+    height = img.size[1] // multiple
+    img = img.resize((width, height), resample=Image.ANTIALIAS)
 
-    into.alpha_composite(img, (center[0] - (wi // multiple // 2), center[1] + (hi // multiple // 2)))
+    into.alpha_composite(img, (
+        center[0] - width // 2,
+        center[1] + (height - h) // 2))
 
 
 def generate_thumbnail(data) -> Image:
+    player_left = data["players"][0]
+    player_right = data["players"][1]
+
     canvas = Image.new('RGBA', SIZE)
 
-    # TODO: This is allocating every time its run, move to constants
+    # Output Path
+    output = os.path.join(OUTPUT_DIR, "test1.png")
+
+    # TODO: This is allocating every time its run, make constant
     # Paths to Template Items
     background_path = os.path.join(THUMBNAIL_DIR, "Thumbnail-Background.png")
     vs_path = os.path.join(THUMBNAIL_DIR, "Thumbnail-VS-01.png")
     tournament_path = os.path.join(THUMBNAIL_DIR, data["tournament"])
     character_background_path = os.path.join(tournament_path, "Thumbnail-CharacterBackground.png")
     text_background_path = os.path.join(tournament_path, "Thumbnail-TextBackground.png")
-    character_paths = [get_character_path(data["players"][0]["character"], data["players"][0]["alt"]),
-                       get_character_path(data["players"][1]["character"], data["players"][1]["alt"])]
+    character_paths = [get_character_path(player_left["character"], player_left["alt"]),
+                       get_character_path(player_right["character"], player_right["alt"])]
 
     # Background
     background = Image.open(background_path, mode="r")
@@ -98,9 +123,10 @@ def generate_thumbnail(data) -> Image:
     canvas.alpha_composite(vs)
 
     # Text
-    draw_thumbnail_text("NIFARES", canvas, (480, 56))
-    draw_thumbnail_text("PARZ", canvas, (1440, 56))
-    draw_thumbnail_text("GRAND FINALS", canvas, (480, 850))
+    draw_thumbnail_text("STRAWBERRY", canvas, (480, 85))
+    draw_thumbnail_text("PARZ", canvas, (1440, 85))
+    draw_thumbnail_text("GRAND FINALS", canvas, (480, 875))
+    draw_thumbnail_text("SMASH OVERSEAS", canvas, (1440, 875))
 
     return canvas
 
