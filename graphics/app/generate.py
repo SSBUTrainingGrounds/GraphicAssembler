@@ -21,7 +21,7 @@ def get_character_path(character: str, alt: str = "01") -> str:
     return os.path.join(RENDERS_DIR, f"{character}/{alt}.png")
 
 
-def crop_character(image, crop) -> Image:
+def crop_character(image: Image, crop: tuple[int, int]) -> Image:
     img_width, img_height = image.size
     return image.crop(((img_width - crop[0]) // 2,
                        (img_height - crop[1]) // 2,
@@ -29,7 +29,7 @@ def crop_character(image, crop) -> Image:
                        (img_height + crop[1]) // 2))
 
 
-def resize_character(image) -> Image:
+def resize_character(image: Image) -> Image:
     width_one, height_one = image.size
     if width_one > 960:
         factor = 960 / width_one
@@ -38,7 +38,14 @@ def resize_character(image) -> Image:
     return image.resize((width_one, height_one))
 
 
-def draw_thumbnail_text(text: str, into, center):
+def generate_character_image(path: str) -> Image:
+    character = Image.open(path, mode="r")
+    character = resize_character(character)
+    character = crop_character(character, CHARACTER_BOX)
+    return character
+
+
+def draw_thumbnail_text(text: str, into: Image, center: tuple[int, int]):
     multiple = 3
 
     # TODO: Make function that determines max size for font based on length of input str
@@ -55,11 +62,8 @@ def draw_thumbnail_text(text: str, into, center):
     into.alpha_composite(img, (center[0] - (wi // multiple // 2), center[1] + (hi // multiple // 2)))
 
 
-def generate_thumbnail(data):
+def generate_thumbnail(data) -> Image:
     canvas = Image.new('RGBA', SIZE)
-
-    # Output Path
-    output = os.path.join(OUTPUT_DIR, "test1.png")
 
     # TODO: This is allocating every time its run, move to constants
     # Paths to Template Items
@@ -79,18 +83,11 @@ def generate_thumbnail(data):
     character_background = Image.open(character_background_path, mode="r")
     canvas.alpha_composite(character_background)
 
-    # TODO: This needs to be a loop or a function
     # Player 1 Character
-    character_one = Image.open(character_paths[0], mode="r")
-    character_one = resize_character(character_one)
-    character_one = crop_character(character_one, CHARACTER_BOX)
-    canvas.alpha_composite(character_one, POSITION[0])
+    canvas.alpha_composite(generate_character_image(character_paths[0]), POSITION[0])
 
     # Player 2 Character
-    character_two = Image.open(character_paths[1], mode="r")
-    character_two = resize_character(character_two)
-    character_two = crop_character(character_two, CHARACTER_BOX)
-    canvas.alpha_composite(character_two, POSITION[1])
+    canvas.alpha_composite(generate_character_image(character_paths[1]), POSITION[1])
 
     # Text Background
     text_background = Image.open(text_background_path, mode="r")
@@ -104,5 +101,12 @@ def generate_thumbnail(data):
     draw_thumbnail_text("NIFARES", canvas, (480, 56))
     draw_thumbnail_text("PARZ", canvas, (1440, 56))
     draw_thumbnail_text("GRAND FINALS", canvas, (480, 850))
+
+    return canvas
+
+
+def save_image(canvas: Image):
+    # Output Path
+    output = os.path.join(OUTPUT_DIR, "test1.png")
 
     canvas.save(output, format="PNG")

@@ -1,6 +1,6 @@
-from PyQt6.QtWidgets import QComboBox, QPushButton
+from PyQt6.QtWidgets import QPushButton
 
-from graphics.app.generate import generate_thumbnail
+from graphics.app.generate import generate_thumbnail, save_image
 
 
 class CreateButton(QPushButton):
@@ -11,4 +11,5 @@ class CreateButton(QPushButton):
         self.clicked.connect(self.button_handler)
 
     def button_handler(self):
-        generate_thumbnail(self.data)
+        image = generate_thumbnail(self.data)
+        save_image(image)

@@ -2,8 +2,8 @@ from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QMainWindow, QWidget
 
 from graphics.ui.widgets.AltDropdown import AltDropdown
 from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
-from graphics.ui.widgets.CharacterPreview import CharacterPreview
 from graphics.ui.widgets.CreateButton import CreateButton
+from graphics.ui.widgets.ImagePreview import ImagePreview
 
 
 class MainWindow(QMainWindow):
@@ -43,32 +43,22 @@ class MainWindow(QMainWindow):
         alt_dropdown_one = AltDropdown(player_one)
         alt_dropdown_two = AltDropdown(player_two)
 
-        character_preview_one = CharacterPreview(player_one)
-        character_preview_two = CharacterPreview(player_two)
+        preview = ImagePreview(data)
 
         button = CreateButton(data)
 
         self.grid.addWidget(character_dropdown_one, 0, 0)
         self.grid.addWidget(alt_dropdown_one, 0, 1)
-        self.grid.addWidget(character_preview_one, 1, 0)
+        self.grid.addWidget(preview, 1, 0, 1, 4)
 
         self.grid.addWidget(character_dropdown_two, 0, 2)
         self.grid.addWidget(alt_dropdown_two, 0, 3)
-        self.grid.addWidget(character_preview_two, 1, 2)
 
-        character_dropdown_one.currentTextChanged.connect(
-            lambda: character_preview_one.update()
-        )
-        character_dropdown_two.currentTextChanged.connect(
-            lambda: character_preview_two.update()
-        )
+        character_dropdown_one.currentTextChanged.connect(lambda: preview.update())
+        character_dropdown_two.currentTextChanged.connect(lambda: preview.update())
 
-        alt_dropdown_one.currentTextChanged.connect(
-            lambda: character_preview_one.update()
-        )
-        alt_dropdown_two.currentTextChanged.connect(
-            lambda: character_preview_two.update()
-        )
+        alt_dropdown_one.currentTextChanged.connect(lambda: preview.update())
+        alt_dropdown_two.currentTextChanged.connect(lambda: preview.update())
 
         self.grid.addWidget(button, 0, 4)
 
