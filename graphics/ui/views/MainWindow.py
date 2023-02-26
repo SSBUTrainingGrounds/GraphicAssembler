@@ -6,6 +6,8 @@ from graphics.ui.widgets.CreateButton import CreateButton
 from graphics.ui.widgets.ImagePreview import ImagePreview
 from graphics.ui.widgets.OffsetSlider import OffsetSlider
 from graphics.ui.widgets.PlayerTag import PlayerTag
+from graphics.ui.widgets.RoundTextbox import RoundTextbox
+from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
 
 
 class MainWindow(QMainWindow):
@@ -13,7 +15,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("TG Graphics")
-        self.resize(600, 450)
+        self.resize(600, 500)
         self.grid = QGridLayout()
 
         layout = QHBoxLayout()
@@ -37,11 +39,14 @@ class MainWindow(QMainWindow):
                 },
             ],
             "tournament": "tos",
-            "round": "",
+            "round": "GRAND FINALS",
         }
 
         player_one = data["players"][0]
         player_two = data["players"][1]
+
+        round_textbox = RoundTextbox(data)
+        tournament_dropdown = TournamentDropdown(data)
 
         character_dropdown_one = CharacterDropdown(player_one)
         character_dropdown_two = CharacterDropdown(player_two)
@@ -59,17 +64,23 @@ class MainWindow(QMainWindow):
 
         button = CreateButton(data)
 
-        self.grid.addWidget(player_tag_one, 0, 0)
-        self.grid.addWidget(character_dropdown_one, 0, 1)
-        self.grid.addWidget(alt_dropdown_one, 0, 2)
-        self.grid.addWidget(offset_sliders_one, 1, 0, 2, 3)
+        self.grid.addWidget(round_textbox, 0, 0, 1, 2)
+        self.grid.addWidget(tournament_dropdown, 0, 2, 1, 2)
 
-        self.grid.addWidget(player_tag_two, 0, 3)
-        self.grid.addWidget(character_dropdown_two, 0, 4)
-        self.grid.addWidget(alt_dropdown_two, 0, 5)
-        self.grid.addWidget(offset_sliders_two, 1, 3, 2, 3)
+        self.grid.addWidget(player_tag_one, 1, 0)
+        self.grid.addWidget(character_dropdown_one, 1, 1)
+        self.grid.addWidget(alt_dropdown_one, 1, 2)
+        self.grid.addWidget(offset_sliders_one, 2, 0, 2, 3)
 
-        self.grid.addWidget(preview, 3, 0, 1, 6)
+        self.grid.addWidget(player_tag_two, 1, 3)
+        self.grid.addWidget(character_dropdown_two, 1, 4)
+        self.grid.addWidget(alt_dropdown_two, 1, 5)
+        self.grid.addWidget(offset_sliders_two, 2, 3, 2, 3)
+
+        self.grid.addWidget(preview, 4, 0, 1, 6)
+
+        round_textbox.textChanged.connect(lambda: preview.update())
+        tournament_dropdown.currentTextChanged.connect(lambda: preview.update())
 
         character_dropdown_one.currentTextChanged.connect(lambda: preview.update())
         character_dropdown_two.currentTextChanged.connect(lambda: preview.update())

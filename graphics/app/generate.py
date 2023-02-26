@@ -124,7 +124,7 @@ def generate_thumbnail(data) -> Image:
     # Text
     draw_thumbnail_text(data["players"][0]["tag"], canvas, (480, 56))
     draw_thumbnail_text(data["players"][1]["tag"], canvas, (1440, 56))
-    draw_thumbnail_text("GRAND FINALS", canvas, (480, 850))
+    draw_thumbnail_text(data["round"], canvas, (480, 850))
 
     return canvas
 
