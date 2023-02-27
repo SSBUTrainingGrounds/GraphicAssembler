@@ -2,6 +2,7 @@ import os
 
 from PyQt6.QtWidgets import QComboBox
 
+from graphics.app.types import TournamentData
 from graphics.definitions import THUMBNAIL_DIR
 
 
@@ -10,7 +11,7 @@ def get_tournaments() -> list[str]:
 
 
 class TournamentDropdown(QComboBox):
-    def __init__(self, data):
+    def __init__(self, data: TournamentData) -> None:
         super().__init__()
 
         self.data = data
@@ -18,5 +19,5 @@ class TournamentDropdown(QComboBox):
         self.setCurrentText(data["tournament"])
         self.currentTextChanged.connect(self.get_selection)
 
-    def get_selection(self, text):
+    def get_selection(self, text: str) -> None:
         self.data["tournament"] = text

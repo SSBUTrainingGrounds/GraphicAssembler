@@ -1,6 +1,9 @@
+from itertools import chain
+
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QMainWindow, QWidget
 
+from graphics.app.types import TournamentData
 from graphics.ui.widgets.AltDropdown import AltDropdown
 from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
 from graphics.ui.widgets.CreateButton import CreateButton
@@ -12,7 +15,7 @@ from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.setWindowTitle("TG Graphics")
@@ -28,20 +31,20 @@ class MainWindow(QMainWindow):
         self.timer.setSingleShot(True)
         self.timer.start(self.timer_duration)
 
-        data = {
+        data: TournamentData = {
             "players": [
                 {
                     "tag": "NIFARES",
                     "character": "01-Mario",
                     "alt": "01",
-                    "offset": [0, 0],
+                    "offset": (0, 0),
                     "zoom": 100,
                 },
                 {
                     "tag": "PARZ",
                     "character": "02-Donkey Kong",
                     "alt": "01",
-                    "offset": [0, 0],
+                    "offset": (0, 0),
                     "zoom": 100,
                 },
             ],
@@ -101,7 +104,9 @@ class MainWindow(QMainWindow):
         for child in [round_textbox, player_tag_one, player_tag_two]:
             child.textChanged.connect(lambda: self.timer.start(self.timer_duration))
 
-        for child in offset_sliders_one.children + offset_sliders_two.children:
+        for child in list(
+            chain(offset_sliders_one.all_children, offset_sliders_two.all_children)
+        ):
             child.valueChanged.connect(lambda: self.timer.start(self.timer_duration))
 
         # Connect the timer to the preview

@@ -3,6 +3,10 @@ import os
 # Import ImageFont for Fonts
 from PIL import Image, ImageDraw, ImageFont
 
+# This is only used for type hinting
+from PIL.Image import Image as ImageType
+
+from graphics.app.types import TournamentData
 from graphics.definitions import FONTS_DIR, OUTPUT_DIR, RENDERS_DIR, THUMBNAIL_DIR
 
 SIZE = (1920, 1080)
@@ -21,8 +25,8 @@ def get_character_path(character: str, alt: str = "01") -> str:
 
 
 def crop_character(
-    image: Image, crop: tuple[int, int], offset: tuple[int, int]
-) -> Image:
+    image: ImageType, crop: tuple[int, int], offset: tuple[int, int]
+) -> ImageType:
     img_width, img_height = image.size
 
     return image.crop(
@@ -35,7 +39,7 @@ def crop_character(
     )
 
 
-def resize_character(image: Image, zoom: int) -> Image:
+def resize_character(image: ImageType, zoom: int) -> ImageType:
     width_one, height_one = image.size
     if width_one > 960:
         factor = 960 / width_one
@@ -44,14 +48,16 @@ def resize_character(image: Image, zoom: int) -> Image:
     return image.resize((width_one, height_one))
 
 
-def generate_character_image(path: str, offset: tuple[int, int], zoom: int) -> Image:
+def generate_character_image(
+    path: str, offset: tuple[int, int], zoom: int
+) -> ImageType:
     character = Image.open(path, mode="r")
     character = resize_character(character, zoom)
     character = crop_character(character, CHARACTER_BOX, offset)
     return character
 
 
-def draw_thumbnail_text(text: str, into: Image, center: tuple[int, int]):
+def draw_thumbnail_text(text: str, into: ImageType, center: tuple[int, int]) -> None:
     multiple = 3
 
     # TODO: Make function that determines max size for font based on length of input str
@@ -62,7 +68,7 @@ def draw_thumbnail_text(text: str, into: Image, center: tuple[int, int]):
 
     img = Image.new("RGBA", (wi, hi), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
-    draw.text((wi / 2, hi / 2), text, (255, 255, 255), syncopate, anchor="mm")
+    draw.text((wi / 2, hi / 2), text, (255, 255, 255), syncopate, anchor="mm")  # type: ignore
 
     img = img.rotate(1.58, expand=True)
     img = img.resize((wi // multiple, hi // multiple), resample=Image.ANTIALIAS)
@@ -72,7 +78,7 @@ def draw_thumbnail_text(text: str, into: Image, center: tuple[int, int]):
     )
 
 
-def generate_thumbnail(data) -> Image:
+def generate_thumbnail(data: TournamentData) -> ImageType:
     canvas = Image.new("RGBA", SIZE)
 
     # TODO: This is allocating every time its run, move to constants
@@ -129,7 +135,7 @@ def generate_thumbnail(data) -> Image:
     return canvas
 
 
-def save_image(canvas: Image):
+def save_image(canvas: ImageType) -> None:
     # Output Path
     output = os.path.join(OUTPUT_DIR, "test1.png")
 
