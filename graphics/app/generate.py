@@ -3,8 +3,7 @@ import os
 # Import ImageFont for Fonts
 from PIL import Image, ImageDraw, ImageFont
 
-from graphics.definitions import (FONTS_DIR, OUTPUT_DIR, RENDERS_DIR,
-                                  THUMBNAIL_DIR)
+from graphics.definitions import FONTS_DIR, OUTPUT_DIR, RENDERS_DIR, THUMBNAIL_DIR
 
 SIZE = (1920, 1080)
 CHARACTER_BOX = (960, 800)
@@ -21,28 +20,34 @@ def get_character_path(character: str, alt: str = "01") -> str:
     return os.path.join(RENDERS_DIR, f"{character}/{alt}.png")
 
 
-def crop_character(image: Image, crop: tuple[int, int]) -> Image:
+def crop_character(
+    image: Image, crop: tuple[int, int], offset: tuple[int, int]
+) -> Image:
     img_width, img_height = image.size
-    # Crop from the Top of the Image to not cut off Face
-    return image.crop(((img_width - crop[0]) // 2,
-                       0,
-                       (img_width + crop[0]) // 2,
-                       crop[1]))
+
+    return image.crop(
+        (
+            (img_width - crop[0] + offset[0]) // 2,
+            (img_height - crop[1] + offset[1]) // 2,
+            (img_width + crop[0] + offset[0]) // 2,
+            (img_height + crop[1] + offset[1]) // 2,
+        )
+    )
 
 
-def resize_character(image: Image) -> Image:
+def resize_character(image: Image, zoom: int) -> Image:
     width_one, height_one = image.size
     if width_one > 960:
         factor = 960 / width_one
-        width_one = int(width_one * factor)
-        height_one = int(height_one * factor)
+        width_one = int(width_one * factor * zoom / 100)
+        height_one = int(height_one * factor * zoom / 100)
     return image.resize((width_one, height_one))
 
 
-def generate_character_image(path: str) -> Image:
+def generate_character_image(path: str, offset: tuple[int, int], zoom: int) -> Image:
     character = Image.open(path, mode="r")
-    character = resize_character(character)
-    character = crop_character(character, CHARACTER_BOX)
+    character = resize_character(character, zoom)
+    character = crop_character(character, CHARACTER_BOX, offset)
     return character
 
 
@@ -95,7 +100,9 @@ def generate_thumbnail(data) -> Image:
     background_path = os.path.join(THUMBNAIL_DIR, "Thumbnail-Background.png")
     vs_path = os.path.join(THUMBNAIL_DIR, "Thumbnail-VS-01.png")
     tournament_path = os.path.join(THUMBNAIL_DIR, data["tournament"])
-    character_background_path = os.path.join(tournament_path, "Thumbnail-CharacterBackground.png")
+    character_background_path = os.path.join(
+        tournament_path, "Thumbnail-CharacterBackground.png"
+    )
     text_background_path = os.path.join(tournament_path, "Thumbnail-TextBackground.png")
     character_paths = [get_character_path(player_left["character"], player_left["alt"]),
                        get_character_path(player_right["character"], player_right["alt"])]
@@ -109,10 +116,20 @@ def generate_thumbnail(data) -> Image:
     canvas.alpha_composite(character_background)
 
     # Player 1 Character
-    canvas.alpha_composite(generate_character_image(character_paths[0]), POSITION[0])
+    canvas.alpha_composite(
+        generate_character_image(
+            character_paths[0], data["players"][0]["offset"], data["players"][0]["zoom"]
+        ),
+        POSITION[0],
+    )
 
     # Player 2 Character
-    canvas.alpha_composite(generate_character_image(character_paths[1]), POSITION[1])
+    canvas.alpha_composite(
+        generate_character_image(
+            character_paths[1], data["players"][1]["offset"], data["players"][1]["zoom"]
+        ),
+        POSITION[1],
+    )
 
     # Text Background
     text_background = Image.open(text_background_path, mode="r")
@@ -125,8 +142,7 @@ def generate_thumbnail(data) -> Image:
     # Text
     draw_thumbnail_text(data["players"][0]["tag"], canvas, (480, 56))
     draw_thumbnail_text(data["players"][1]["tag"], canvas, (1440, 56))
-    draw_thumbnail_text("GRAND FINALS", canvas, (480, 850))
-    draw_thumbnail_text("SMASH OVERSEAS", canvas, (1440, 875))
+    draw_thumbnail_text(data["round"], canvas, (480, 850))
 
     return canvas
 

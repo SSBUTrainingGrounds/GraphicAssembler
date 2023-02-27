@@ -1,5 +1,7 @@
 import os
+
 from PyQt6.QtWidgets import QComboBox
+
 from graphics.definitions import RENDERS_DIR
 
 
@@ -13,7 +15,7 @@ class CharacterDropdown(QComboBox):
 
         self.player_data = player_data
         self.addItems(get_characters())
-        self.player_data["character"] = self.currentText()
+        self.setCurrentText(player_data["character"])
         self.currentTextChanged.connect(self.get_selection)
 
     def get_selection(self, text):
