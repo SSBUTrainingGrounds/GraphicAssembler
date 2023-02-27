@@ -22,7 +22,7 @@ class OffsetSlider(QWidget):
         self.layout.addWidget(self.zoom_slider, 0, 0)
         self.layout.addWidget(self.horizontal_slider, 0, 1)
         self.layout.addWidget(self.vertical_slider, 0, 2)
-        self.layout.addWidget(self.label, 1, 0)
+        self.layout.addWidget(self.label, 1, 0, 1, 3)
 
         self.horizontal_slider.valueChanged.connect(
             lambda: self.label.setText(

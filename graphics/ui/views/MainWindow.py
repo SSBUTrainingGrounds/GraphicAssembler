@@ -1,3 +1,4 @@
+from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QMainWindow, QWidget
 
 from graphics.ui.widgets.AltDropdown import AltDropdown
@@ -17,9 +18,15 @@ class MainWindow(QMainWindow):
         self.setWindowTitle("TG Graphics")
         self.resize(600, 500)
         self.grid = QGridLayout()
+        self.timer_duration = 100  # Timer in milliseconds
 
         layout = QHBoxLayout()
         layout.addLayout(self.grid)
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update)
+        self.timer.setSingleShot(True)
+        self.timer.start(self.timer_duration)
 
         data = {
             "players": [
@@ -79,23 +86,26 @@ class MainWindow(QMainWindow):
 
         self.grid.addWidget(preview, 4, 0, 1, 6)
 
-        round_textbox.textChanged.connect(lambda: preview.update())
-        tournament_dropdown.currentTextChanged.connect(lambda: preview.update())
+        # Connect all the widgets to the timer
+        for child in [
+            tournament_dropdown,
+            character_dropdown_one,
+            character_dropdown_two,
+            alt_dropdown_one,
+            alt_dropdown_two,
+        ]:
+            child.currentTextChanged.connect(
+                lambda: (self.timer.start(self.timer_duration))
+            )
 
-        character_dropdown_one.currentTextChanged.connect(lambda: preview.update())
-        character_dropdown_two.currentTextChanged.connect(lambda: preview.update())
+        for child in [round_textbox, player_tag_one, player_tag_two]:
+            child.textChanged.connect(lambda: self.timer.start(self.timer_duration))
 
-        alt_dropdown_one.currentTextChanged.connect(lambda: preview.update())
-        alt_dropdown_two.currentTextChanged.connect(lambda: preview.update())
+        for child in offset_sliders_one.children + offset_sliders_two.children:
+            child.valueChanged.connect(lambda: self.timer.start(self.timer_duration))
 
-        player_tag_one.textChanged.connect(lambda: preview.update())
-        player_tag_two.textChanged.connect(lambda: preview.update())
-
-        for child in offset_sliders_one.children:
-            child.valueChanged.connect(lambda: preview.update())
-
-        for child in offset_sliders_two.children:
-            child.valueChanged.connect(lambda: preview.update())
+        # Connect the timer to the preview
+        self.timer.timeout.connect(preview.update)
 
         self.grid.addWidget(button, 0, 6)
 
