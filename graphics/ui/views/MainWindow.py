@@ -1,8 +1,10 @@
 from itertools import chain
 
-from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QMainWindow, QWidget
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QIcon
+from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QMainWindow, QWidget
 
+from graphics.definitions import ASSET_DIR
 from graphics.ui.widgets.AltDropdown import AltDropdown
 from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
 from graphics.ui.widgets.CreateButton import CreateButton
@@ -19,7 +21,9 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         self.setWindowTitle("TG Graphics")
-        self.resize(600, 500)
+        self.resize(800, 700)
+        self.setWindowIcon(QIcon(ASSET_DIR + "/icon.png"))
+
         self.grid = QGridLayout()
         self.timer_duration = 100  # Timer in milliseconds
 
@@ -74,20 +78,46 @@ class MainWindow(QMainWindow):
 
         button = CreateButton(data)
 
-        self.grid.addWidget(round_textbox, 0, 0, 1, 2)
-        self.grid.addWidget(tournament_dropdown, 0, 2, 1, 2)
+        self.grid.addWidget(QLabel("Round"), 0, 0, 1, 3)
+        self.grid.addWidget(QLabel("Tournament"), 0, 4, 1, 3)
+        self.grid.addWidget(round_textbox, 1, 0, 1, 3)
+        self.grid.addWidget(tournament_dropdown, 1, 4, 1, 3)
 
-        self.grid.addWidget(player_tag_one, 1, 0)
-        self.grid.addWidget(character_dropdown_one, 1, 1)
-        self.grid.addWidget(alt_dropdown_one, 1, 2)
-        self.grid.addWidget(offset_sliders_one, 2, 0, 2, 3)
+        player_one_label = QLabel("Player 1")
+        player_one_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        player_one_label.setStyleSheet(
+            "font-size: 14px; color: #777777; margin-top: 10px; margin-bottom: 10px;"
+        )
 
-        self.grid.addWidget(player_tag_two, 1, 3)
-        self.grid.addWidget(character_dropdown_two, 1, 4)
-        self.grid.addWidget(alt_dropdown_two, 1, 5)
-        self.grid.addWidget(offset_sliders_two, 2, 3, 2, 3)
+        player_two_label = QLabel("Player 2")
+        player_two_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        player_two_label.setStyleSheet(
+            "font-size: 14px; color: #777777; margin-top: 10px; margin-bottom: 10px;"
+        )
 
-        self.grid.addWidget(preview, 4, 0, 1, 6)
+        self.grid.addWidget(player_one_label, 2, 0, 1, 3)
+        self.grid.addWidget(QLabel("Tag"), 3, 0, 1, 3)
+        self.grid.addWidget(QLabel("Character"), 3, 1)
+        self.grid.addWidget(QLabel("Alt"), 3, 2)
+
+        self.grid.addWidget(player_tag_one, 4, 0)
+        self.grid.addWidget(character_dropdown_one, 4, 1)
+        self.grid.addWidget(alt_dropdown_one, 4, 2)
+        self.grid.addWidget(offset_sliders_one, 5, 0, 1, 3)
+
+        self.grid.addWidget(player_two_label, 2, 3, 1, 3)
+        self.grid.addWidget(QLabel("Tag"), 3, 4, 1, 3)
+        self.grid.addWidget(QLabel("Character"), 3, 5)
+        self.grid.addWidget(QLabel("Alt"), 3, 6)
+
+        self.grid.addWidget(player_tag_two, 4, 4)
+        self.grid.addWidget(character_dropdown_two, 4, 5)
+        self.grid.addWidget(alt_dropdown_two, 4, 6)
+        self.grid.addWidget(offset_sliders_two, 5, 4, 1, 3)
+
+        self.grid.setColumnMinimumWidth(3, 40)
+
+        self.grid.addWidget(preview, 8, 0, 1, 7, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Connect all the widgets to the timer
         for child in [
@@ -112,7 +142,7 @@ class MainWindow(QMainWindow):
         # Connect the timer to the preview
         self.timer.timeout.connect(preview.update)
 
-        self.grid.addWidget(button, 0, 6)
+        self.grid.addWidget(button, 9, 0, 1, 7, alignment=Qt.AlignmentFlag.AlignCenter)
 
         widget = QWidget()
 

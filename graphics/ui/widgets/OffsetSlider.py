@@ -19,31 +19,31 @@ class OffsetSlider(QWidget):
             self.zoom_slider,
         ]
 
-        self.label = QLabel(
-            f"Zoom: {player_data['zoom']}% | Offset: {player_data['offset']}"
-        )
+        self.zoom_label = QLabel("Zoom: (100%)")
+        self.offset_x_label = QLabel("Offset X: (+000)")
+        self.offset_y_label = QLabel("Offset Y: (+000)")
 
         self.grid_layout = QGridLayout()
 
-        self.grid_layout.addWidget(self.zoom_slider, 0, 0)
-        self.grid_layout.addWidget(self.horizontal_slider, 0, 1)
-        self.grid_layout.addWidget(self.vertical_slider, 0, 2)
-        self.grid_layout.addWidget(self.label, 1, 0, 1, 3)
+        self.grid_layout.addWidget(self.zoom_label, 0, 0)
+        self.grid_layout.addWidget(self.zoom_slider, 1, 0)
+        self.grid_layout.addWidget(self.offset_x_label, 0, 1)
+        self.grid_layout.addWidget(self.horizontal_slider, 1, 1)
+        self.grid_layout.addWidget(self.offset_y_label, 0, 2)
+        self.grid_layout.addWidget(self.vertical_slider, 1, 2)
 
         self.horizontal_slider.valueChanged.connect(
-            lambda: self.label.setText(
-                f"Zoom: {player_data['zoom']}% | Offset: {player_data['offset']}"
+            lambda: self.offset_x_label.setText(
+                f"Offset X: ({player_data['offset'][0]:+04d})"
             )
         )
         self.vertical_slider.valueChanged.connect(
-            lambda: self.label.setText(
-                f"Zoom: {player_data['zoom']}% | Offset: {player_data['offset']}"
+            lambda: self.offset_y_label.setText(
+                f"Offset Y: ({player_data['offset'][1]:+04d})"
             )
         )
         self.zoom_slider.valueChanged.connect(
-            lambda: self.label.setText(
-                f"Zoom: {player_data['zoom']}% | Offset: {player_data['offset']}"
-            )
+            lambda: self.zoom_label.setText(f"Zoom: ({player_data['zoom']}%)")
         )
 
         self.setLayout(self.grid_layout)
@@ -94,7 +94,7 @@ class ZoomSlider(QSlider):
     def __init__(self, player_data: PlayerData) -> None:
         super().__init__()
         self.player_data = player_data
-        self.setOrientation(Qt.Orientation.Vertical)
+        self.setOrientation(Qt.Orientation.Horizontal)
         self.setMinimum(50)
         self.setMaximum(200)
         self.setSingleStep(1)
