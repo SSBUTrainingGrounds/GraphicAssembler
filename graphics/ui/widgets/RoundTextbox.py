@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QLineEdit
 
-from graphics.app.types import TournamentData
+from graphics.utils.types import TournamentData
 
 
 class RoundTextbox(QLineEdit):

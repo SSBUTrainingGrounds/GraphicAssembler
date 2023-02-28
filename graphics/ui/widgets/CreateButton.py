@@ -1,7 +1,7 @@
 from PyQt6.QtWidgets import QPushButton
 
 from graphics.app.generate import generate_thumbnail, save_image
-from graphics.app.types import TournamentData
+from graphics.utils.types import TournamentData
 
 
 class CreateButton(QPushButton):

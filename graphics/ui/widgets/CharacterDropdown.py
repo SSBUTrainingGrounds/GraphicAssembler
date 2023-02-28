@@ -2,8 +2,8 @@ import os
 
 from PyQt6.QtWidgets import QComboBox
 
-from graphics.app.types import PlayerData
 from graphics.definitions import RENDERS_DIR
+from graphics.utils.types import PlayerData
 
 
 def get_characters() -> list[str]:

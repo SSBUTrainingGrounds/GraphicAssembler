@@ -1,7 +1,7 @@
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGridLayout, QLabel, QSlider, QWidget
 
-from graphics.app.types import PlayerData
+from graphics.utils.types import PlayerData
 
 
 class OffsetSlider(QWidget):

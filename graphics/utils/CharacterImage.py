@@ -1,10 +1,11 @@
 import os
-from graphics.definitions import RENDERS_DIR
 
 from PIL import Image
 
 # This is only used for type hinting
 from PIL.Image import Image as ImageType
+
+from graphics.definitions import RENDERS_DIR
 
 
 def get_character_path(character: str, alt: str = "01") -> str:
@@ -18,7 +19,7 @@ def get_character_path(character: str, alt: str = "01") -> str:
 
 
 def crop_character(
-        image: ImageType, crop: tuple[int, int], offset: tuple[int, int]
+    image: ImageType, crop: tuple[int, int], offset: tuple[int, int]
 ) -> ImageType:
     img_width, img_height = image.size
 
@@ -49,4 +50,3 @@ def generate_character_image(
     character = resize_character(character, zoom)
     character = crop_character(character, character_box, offset)
     return character
-

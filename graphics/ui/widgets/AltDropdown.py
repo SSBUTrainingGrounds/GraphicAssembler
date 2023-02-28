@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QComboBox
 
-from graphics.app.types import PlayerData
+from graphics.utils.types import PlayerData
 
 
 class AltDropdown(QComboBox):
