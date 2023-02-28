@@ -1,44 +1,52 @@
+from typing import Callable
+
 from PIL.Image import Image
 from PyQt6.QtCore import QObject, QRunnable, Qt, QThreadPool, pyqtSignal
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QLabel
 
 from graphics.app.generate import generate_thumbnail
+from graphics.app.types import TournamentData
 
 
 class ImagePreview(QLabel):
-    def __init__(self, data):
+    def __init__(self, data: TournamentData) -> None:
         super().__init__()
         self.data = data
         self.threadpool = QThreadPool()
         self.setPixmap(
-            QPixmap(generate_thumbnail(self.data).toqpixmap()).scaledToHeight(
+            QPixmap(generate_thumbnail(self.data).toqpixmap()).scaledToHeight(  # type: ignore
                 300, mode=Qt.TransformationMode.SmoothTransformation
             )
         )
 
-    def set_pixmap(self, image: Image):
+    def set_pixmap(self, image: Image) -> None:
         self.setPixmap(
-            QPixmap(image.toqpixmap()).scaledToHeight(
+            QPixmap(image.toqpixmap()).scaledToHeight(  # type: ignore
                 300, mode=Qt.TransformationMode.SmoothTransformation
             )
         )
 
-    def update(self):
+    def update(self) -> None:
         worker = Worker(generate_thumbnail, self.data)
         worker.signals.result.connect(self.set_pixmap)
         self.threadpool.start(worker)
 
 
 class Worker(QRunnable):
-    def __init__(self, fn, *args, **kwargs):
+    def __init__(
+        self,
+        fn: Callable[[TournamentData], Image],
+        *args: TournamentData,
+        **kwargs: TournamentData
+    ) -> None:
         super().__init__()
         self.fn = fn
         self.args = args
         self.kwargs = kwargs
         self.signals = WorkerSignals()
 
-    def run(self):
+    def run(self) -> None:
         try:
             result = self.fn(*self.args, **self.kwargs)
         except Exception as e:

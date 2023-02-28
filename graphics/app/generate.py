@@ -3,6 +3,10 @@ import os
 # Import ImageFont for Fonts
 from PIL import Image, ImageDraw, ImageFont
 
+# This is only used for type hinting
+from PIL.Image import Image as ImageType
+
+from graphics.app.types import TournamentData
 from graphics.definitions import FONTS_DIR, OUTPUT_DIR, RENDERS_DIR, THUMBNAIL_DIR
 
 SIZE = (1920, 1080)
@@ -21,8 +25,8 @@ def get_character_path(character: str, alt: str = "01") -> str:
 
 
 def crop_character(
-    image: Image, crop: tuple[int, int], offset: tuple[int, int]
-) -> Image:
+    image: ImageType, crop: tuple[int, int], offset: tuple[int, int]
+) -> ImageType:
     img_width, img_height = image.size
 
     return image.crop(
@@ -35,7 +39,7 @@ def crop_character(
     )
 
 
-def resize_character(image: Image, zoom: int) -> Image:
+def resize_character(image: ImageType, zoom: int) -> ImageType:
     width_one, height_one = image.size
     if width_one > 960:
         factor = 960 / width_one
@@ -44,8 +48,11 @@ def resize_character(image: Image, zoom: int) -> Image:
     return image.resize((width_one, height_one))
 
 
-def generate_character_image(path: str, offset: tuple[int, int], zoom: int) -> Image:
+def generate_character_image(
+    path: str, offset: tuple[int, int], zoom: int
+) -> ImageType:
     character = Image.open(path, mode="r")
+    character = character.convert("RGBA")
     character = resize_character(character, zoom)
     character = crop_character(character, CHARACTER_BOX, offset)
     return character
@@ -60,7 +67,7 @@ def biggest_font_size(text: str, font_path, box_size, guess) -> ImageFont:
     return font
 
 
-def draw_thumbnail_text(text: str, into: Image, center: tuple[int, int]):
+def draw_thumbnail_text(text: str, into: ImageType, center: tuple[int, int]) -> None:
 
     # multiple is added because rotating causes image to become jagged
     # sizing it down with the Image.ANTIALIAS flag smooths it out
@@ -73,8 +80,7 @@ def draw_thumbnail_text(text: str, into: Image, center: tuple[int, int]):
     img = Image.new('RGBA', (width, height), (0, 0, 0, 0))
     draw = ImageDraw.Draw(img)
     draw.text((0, 0), text, (255, 255, 255), syncopate)
-    _, h = draw.textsize(text, font=syncopate)
-    h = h // multiple
+    bbox = draw.textbbox((0, 0), text, ImageFont.truetype(os.path.join(FONTS_DIR, 'Syncopate-Bold.ttf'), 130))
 
     img = img.rotate(1.6, expand=True)
     width = img.size[0] // multiple
@@ -82,15 +88,14 @@ def draw_thumbnail_text(text: str, into: Image, center: tuple[int, int]):
     img = img.resize((width, height), resample=Image.ANTIALIAS)
 
     into.alpha_composite(img, (
-        center[0] - width // 2,
-        center[1] + (height - h) // 2))
+        center[0] - (width // 2),
+        center[1] + (bbox[3] - height // 2)))
 
 
-def generate_thumbnail(data) -> Image:
+def generate_thumbnail(data: TournamentData) -> ImageType:
     player_left = data["players"][0]
     player_right = data["players"][1]
-
-    canvas = Image.new('RGBA', SIZE)
+    canvas = Image.new("RGBA", SIZE)
 
     # Output Path
     output = os.path.join(OUTPUT_DIR, "test1.png")
@@ -118,7 +123,7 @@ def generate_thumbnail(data) -> Image:
     # Player 1 Character
     canvas.alpha_composite(
         generate_character_image(
-            character_paths[0], data["players"][0]["offset"], data["players"][0]["zoom"]
+            character_paths[0], player_left["offset"], player_left["zoom"]
         ),
         POSITION[0],
     )
@@ -126,7 +131,7 @@ def generate_thumbnail(data) -> Image:
     # Player 2 Character
     canvas.alpha_composite(
         generate_character_image(
-            character_paths[1], data["players"][1]["offset"], data["players"][1]["zoom"]
+            character_paths[1], player_right["offset"], player_right["zoom"]
         ),
         POSITION[1],
     )
@@ -140,14 +145,19 @@ def generate_thumbnail(data) -> Image:
     canvas.alpha_composite(vs)
 
     # Text
-    draw_thumbnail_text(data["players"][0]["tag"], canvas, (480, 56))
-    draw_thumbnail_text(data["players"][1]["tag"], canvas, (1440, 56))
-    draw_thumbnail_text(data["round"], canvas, (480, 850))
+    draw_thumbnail_text(player_left["tag"], canvas, (480, 45))
+    draw_thumbnail_text(player_right["tag"], canvas, (1440, 45))
+    draw_thumbnail_text(data["round"], canvas, (480, 835))
+
+    if data["tournament"] == "so":
+        draw_thumbnail_text("SMASH OVERSEAS", canvas, (1440, 835))
+    else:
+        draw_thumbnail_text("TRIALS OF SMASH", canvas, (1440, 835))
 
     return canvas
 
 
-def save_image(canvas: Image):
+def save_image(canvas: ImageType) -> None:
     # Output Path
     output = os.path.join(OUTPUT_DIR, "test1.png")
 
