@@ -2,7 +2,7 @@ import os
 
 from PyQt6.QtWidgets import QComboBox
 
-from graphics.definitions import THUMBNAIL_DIR
+from graphics.utils.definitions import THUMBNAIL_DIR
 from graphics.utils.types import TournamentData
 
 

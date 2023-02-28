@@ -6,8 +6,8 @@ from PIL import Image, ImageDraw, ImageFont
 # This is only used for type hinting
 from PIL.Image import Image as ImageType
 
-from graphics.definitions import FONTS_DIR, OUTPUT_DIR, THUMBNAIL_DIR
 from graphics.utils.CharacterImage import generate_character_image, get_character_path
+from graphics.utils.definitions import FONTS_DIR, OUTPUT_DIR, THUMBNAIL_DIR
 from graphics.utils.Text import biggest_font_size
 from graphics.utils.types import TournamentData
 
@@ -120,6 +120,6 @@ def generate_thumbnail(data: TournamentData) -> ImageType:
 
 def save_image(canvas: ImageType) -> None:
     # Output Path
-    output = os.path.join(OUTPUT_DIR, "test1.png")
+    output = os.path.join(OUTPUT_DIR, "thumbnail.png")
 
     canvas.save(output, format="PNG")

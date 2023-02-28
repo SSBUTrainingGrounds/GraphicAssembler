@@ -5,7 +5,7 @@ from PIL import Image
 # This is only used for type hinting
 from PIL.Image import Image as ImageType
 
-from graphics.definitions import RENDERS_DIR
+from graphics.utils.definitions import RENDERS_DIR
 
 
 def get_character_path(character: str, alt: str = "01") -> str:

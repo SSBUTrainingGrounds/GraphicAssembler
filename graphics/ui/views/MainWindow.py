@@ -4,7 +4,6 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QMainWindow, QWidget
 
-from graphics.definitions import ASSET_DIR
 from graphics.ui.widgets.AltDropdown import AltDropdown
 from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
 from graphics.ui.widgets.CreateButton import CreateButton
@@ -13,6 +12,7 @@ from graphics.ui.widgets.OffsetSlider import OffsetSlider
 from graphics.ui.widgets.PlayerTag import PlayerTag
 from graphics.ui.widgets.RoundTextbox import RoundTextbox
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
+from graphics.utils.definitions import ASSET_DIR
 from graphics.utils.types import TournamentData
 
 

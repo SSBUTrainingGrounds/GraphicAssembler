@@ -59,8 +59,8 @@ class HorizontalSlider(QSlider):
         super().__init__()
         self.player_data = player_data
         self.setOrientation(Qt.Orientation.Horizontal)
-        self.setMinimum(-800)
-        self.setMaximum(800)
+        self.setMinimum(-999)
+        self.setMaximum(999)
         self.setSingleStep(1)
         self.setValue(0)
         self.valueChanged.connect(self.get_selection)
@@ -77,8 +77,8 @@ class VerticalSlider(QSlider):
         super().__init__()
         self.player_data = player_data
         self.setOrientation(Qt.Orientation.Vertical)
-        self.setMinimum(-800)
-        self.setMaximum(800)
+        self.setMinimum(-999)
+        self.setMaximum(999)
         self.setSingleStep(1)
         self.setValue(0)
         self.valueChanged.connect(self.get_selection)
@@ -95,8 +95,8 @@ class ZoomSlider(QSlider):
         super().__init__()
         self.player_data = player_data
         self.setOrientation(Qt.Orientation.Horizontal)
-        self.setMinimum(50)
-        self.setMaximum(200)
+        self.setMinimum(80)
+        self.setMaximum(250)
         self.setSingleStep(1)
         self.setValue(100)
         self.valueChanged.connect(self.get_selection)
