@@ -4,12 +4,9 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QMainWindow, QWidget
 
-from graphics.ui.widgets.AltDropdown import AltDropdown
-from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
 from graphics.ui.widgets.CreateButton import CreateButton
 from graphics.ui.widgets.ImagePreview import ImagePreview
-from graphics.ui.widgets.OffsetSlider import OffsetSlider
-from graphics.ui.widgets.PlayerTag import PlayerTag
+from graphics.ui.widgets.PlayerBox import PlayerBox
 from graphics.ui.widgets.RoundTextbox import RoundTextbox
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
 from graphics.utils.definitions import ASSET_DIR
@@ -62,18 +59,6 @@ class MainWindow(QMainWindow):
         round_textbox = RoundTextbox(data)
         tournament_dropdown = TournamentDropdown(data)
 
-        character_dropdown_one = CharacterDropdown(player_one)
-        character_dropdown_two = CharacterDropdown(player_two)
-
-        alt_dropdown_one = AltDropdown(player_one)
-        alt_dropdown_two = AltDropdown(player_two)
-
-        player_tag_one = PlayerTag(player_one)
-        player_tag_two = PlayerTag(player_two)
-
-        offset_sliders_one = OffsetSlider(player_one)
-        offset_sliders_two = OffsetSlider(player_two)
-
         preview = ImagePreview(data)
 
         button = CreateButton(data)
@@ -83,59 +68,38 @@ class MainWindow(QMainWindow):
         self.grid.addWidget(round_textbox, 1, 0, 1, 3)
         self.grid.addWidget(tournament_dropdown, 1, 4, 1, 3)
 
-        player_one_label = QLabel("Player 1")
-        player_one_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        player_one_label.setStyleSheet(
-            "font-size: 14px; color: #777777; margin-top: 10px; margin-bottom: 10px;"
-        )
+        player_box_one = PlayerBox(player_one, 1)
+        player_box_two = PlayerBox(player_two, 2)
 
-        player_two_label = QLabel("Player 2")
-        player_two_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        player_two_label.setStyleSheet(
-            "font-size: 14px; color: #777777; margin-top: 10px; margin-bottom: 10px;"
-        )
-
-        self.grid.addWidget(player_one_label, 2, 0, 1, 3)
-        self.grid.addWidget(QLabel("Tag"), 3, 0, 1, 3)
-        self.grid.addWidget(QLabel("Character"), 3, 1)
-        self.grid.addWidget(QLabel("Alt"), 3, 2)
-
-        self.grid.addWidget(player_tag_one, 4, 0)
-        self.grid.addWidget(character_dropdown_one, 4, 1)
-        self.grid.addWidget(alt_dropdown_one, 4, 2)
-        self.grid.addWidget(offset_sliders_one, 5, 0, 1, 3)
-
-        self.grid.addWidget(player_two_label, 2, 3, 1, 3)
-        self.grid.addWidget(QLabel("Tag"), 3, 4, 1, 3)
-        self.grid.addWidget(QLabel("Character"), 3, 5)
-        self.grid.addWidget(QLabel("Alt"), 3, 6)
-
-        self.grid.addWidget(player_tag_two, 4, 4)
-        self.grid.addWidget(character_dropdown_two, 4, 5)
-        self.grid.addWidget(alt_dropdown_two, 4, 6)
-        self.grid.addWidget(offset_sliders_two, 5, 4, 1, 3)
+        self.grid.addWidget(player_box_one, 2, 0, 4, 3)
+        self.grid.addWidget(player_box_two, 2, 4, 4, 3)
 
         self.grid.setColumnMinimumWidth(3, 40)
 
         self.grid.addWidget(preview, 8, 0, 1, 7, alignment=Qt.AlignmentFlag.AlignCenter)
 
         # Connect all the widgets to the timer
-        for child in [
-            tournament_dropdown,
-            character_dropdown_one,
-            character_dropdown_two,
-            alt_dropdown_one,
-            alt_dropdown_two,
-        ]:
+        for child in (
+            [tournament_dropdown]
+            + player_box_one.all_dropdowns
+            + player_box_two.all_dropdowns
+        ):
             child.currentTextChanged.connect(
                 lambda: (self.timer.start(self.timer_duration))
             )
 
-        for child in [round_textbox, player_tag_one, player_tag_two]:
+        for child in [
+            round_textbox,
+            player_box_one.player_tag,
+            player_box_two.player_tag,
+        ]:
             child.textChanged.connect(lambda: self.timer.start(self.timer_duration))
 
         for child in list(
-            chain(offset_sliders_one.all_children, offset_sliders_two.all_children)
+            chain(
+                player_box_one.offset_sliders.all_children,
+                player_box_two.offset_sliders.all_children,
+            )
         ):
             child.valueChanged.connect(lambda: self.timer.start(self.timer_duration))
 

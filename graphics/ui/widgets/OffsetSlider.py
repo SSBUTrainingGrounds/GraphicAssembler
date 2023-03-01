@@ -49,7 +49,6 @@ class OffsetSlider(QWidget):
         self.setLayout(self.grid_layout)
 
     def reset(self) -> None:
-        # TODO: Add a reset button
         for child in self.all_children:
             child.reset()
 
@@ -105,4 +104,4 @@ class ZoomSlider(QSlider):
         self.player_data["zoom"] = value
 
     def reset(self) -> None:
-        self.setValue(0)
+        self.setValue(100)

@@ -13,3 +13,6 @@ class AltDropdown(QComboBox):
 
     def get_selection(self, text: str) -> None:
         self.player_data["alt"] = text
+
+    def reset(self) -> None:
+        self.setCurrentText("01")
