@@ -20,7 +20,7 @@ class AltDropdown(QComboBox):
             self.character_type = "character"
 
         self.addItems(["01", "02", "03", "04", "05", "06", "07", "08"])
-        self.player_data[f"{self.character_type}"]["alt"] = self.currentText()
+        self.setCurrentText(player_data[f"{self.character_type}"]["alt"])  # type: ignore
         self.currentTextChanged.connect(self.get_selection)
 
     def get_selection(self, text: str) -> None:
