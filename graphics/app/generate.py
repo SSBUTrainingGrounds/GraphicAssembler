@@ -9,7 +9,7 @@ from PIL.Image import Image as ImageType
 from graphics.utils.CharacterImage import generate_character_image, get_character_path
 from graphics.utils.definitions import FONTS_DIR, OUTPUT_DIR, THUMBNAIL_DIR
 from graphics.utils.Text import biggest_font_size
-from graphics.utils.types import TournamentData
+from graphics.utils.types import ThumnbailData
 
 SIZE = (1920, 1080)
 CHARACTER_BOX = (960, 800)
@@ -48,7 +48,7 @@ def draw_thumbnail_text(text: str, into: ImageType, center: tuple[int, int]) -> 
     )
 
 
-def generate_thumbnail(data: TournamentData) -> ImageType:
+def generate_thumbnail(data: ThumnbailData) -> ImageType:
     player_left = data["players"][0]
     player_right = data["players"][1]
     canvas = Image.new("RGBA", SIZE)
@@ -63,8 +63,12 @@ def generate_thumbnail(data: TournamentData) -> ImageType:
     )
     text_background_path = os.path.join(tournament_path, "Thumbnail-TextBackground.png")
     character_paths = [
-        get_character_path(player_left["character"], player_left["alt"]),
-        get_character_path(player_right["character"], player_right["alt"]),
+        get_character_path(
+            player_left["character"]["name"], player_left["character"]["alt"]
+        ),
+        get_character_path(
+            player_right["character"]["name"], player_right["character"]["alt"]
+        ),
     ]
 
     # Background
@@ -79,8 +83,8 @@ def generate_thumbnail(data: TournamentData) -> ImageType:
     canvas.alpha_composite(
         generate_character_image(
             character_paths[0],
-            player_left["offset"],
-            player_left["zoom"],
+            player_left["character"]["offset"],
+            player_left["character"]["zoom"],
             CHARACTER_BOX,
         ),
         POSITION[0],
@@ -90,8 +94,8 @@ def generate_thumbnail(data: TournamentData) -> ImageType:
     canvas.alpha_composite(
         generate_character_image(
             character_paths[1],
-            player_right["offset"],
-            player_right["zoom"],
+            player_right["character"]["offset"],
+            player_right["character"]["zoom"],
             CHARACTER_BOX,
         ),
         POSITION[1],

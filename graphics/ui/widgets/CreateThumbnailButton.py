@@ -2,11 +2,11 @@ from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QPushButton
 
 from graphics.app.generate import generate_thumbnail, save_image
-from graphics.utils.types import TournamentData
+from graphics.utils.types import ThumnbailData
 
 
 class CreateButton(QPushButton):
-    def __init__(self, data: TournamentData) -> None:
+    def __init__(self, data: ThumnbailData) -> None:
         super().__init__()
         self.data = data
         self.setText("Save Image")

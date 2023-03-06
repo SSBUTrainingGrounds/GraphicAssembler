@@ -5,11 +5,11 @@ from graphics.ui.widgets.AltDropdown import AltDropdown
 from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
 from graphics.ui.widgets.OffsetSlider import OffsetSlider
 from graphics.ui.widgets.PlayerTag import PlayerTag
-from graphics.utils.types import PlayerData
+from graphics.utils.types import ThumbnailPlayer
 
 
 class PlayerBox(QWidget):
-    def __init__(self, player_data: PlayerData, player_number: int) -> None:
+    def __init__(self, player_data: ThumbnailPlayer, player_number: int) -> None:
         super().__init__()
         self.player_data = player_data
         self.player_number = player_number

@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import QLineEdit
 
-from graphics.utils.types import TournamentData
+from graphics.utils.types import ThumnbailData
 
 
 class RoundTextbox(QLineEdit):
-    def __init__(self, data: TournamentData) -> None:
+    def __init__(self, data: ThumnbailData) -> None:
         super().__init__()
         self.data = data
         self.setText(data["round"])

@@ -4,13 +4,13 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QWidget
 
-from graphics.ui.widgets.CreateButton import CreateButton
-from graphics.ui.widgets.ImagePreview import ImagePreview
-from graphics.ui.widgets.PlayerBox import PlayerBox
+from graphics.ui.widgets.CreateThumbnailButton import CreateButton
+from graphics.ui.widgets.PlayerBoxThumbnail import PlayerBox
 from graphics.ui.widgets.RoundTextbox import RoundTextbox
+from graphics.ui.widgets.ThumbnailPreview import ImagePreview
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
 from graphics.utils.definitions import ASSET_DIR
-from graphics.utils.types import TournamentData
+from graphics.utils.types import ThumnbailData
 
 
 class ThumbnailWindow(QWidget):
@@ -32,21 +32,25 @@ class ThumbnailWindow(QWidget):
         self.timer.setSingleShot(True)
         self.timer.start(self.timer_duration)
 
-        data: TournamentData = {
+        data: ThumnbailData = {
             "players": [
                 {
                     "tag": "PLAYER 1",
-                    "character": "01-Mario",
-                    "alt": "01",
-                    "offset": (0, 0),
-                    "zoom": 100,
+                    "character": {
+                        "name": "01-Mario",
+                        "alt": "01",
+                        "offset": (0, 0),
+                        "zoom": 100,
+                    },
                 },
                 {
                     "tag": "PLAYER 2",
-                    "character": "02-Donkey Kong",
-                    "alt": "01",
-                    "offset": (0, 0),
-                    "zoom": 100,
+                    "character": {
+                        "name": "02-Donkey Kong",
+                        "alt": "01",
+                        "offset": (0, 0),
+                        "zoom": 100,
+                    },
                 },
             ],
             "tournament": "tos",
