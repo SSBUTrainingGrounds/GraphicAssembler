@@ -3,7 +3,7 @@ import os
 from PyQt6.QtWidgets import QComboBox
 
 from graphics.utils.definitions import THUMBNAIL_DIR
-from graphics.utils.types import ThumnbailData, Top8Data
+from graphics.utils.types import ThumbnailData, Top8Data
 
 
 def get_tournaments() -> list[str]:
@@ -11,7 +11,7 @@ def get_tournaments() -> list[str]:
 
 
 class TournamentDropdown(QComboBox):
-    def __init__(self, data: ThumnbailData | Top8Data) -> None:
+    def __init__(self, data: ThumbnailData | Top8Data) -> None:
         super().__init__()
 
         self.data = data

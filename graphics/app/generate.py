@@ -9,7 +9,7 @@ from PIL.Image import Image as ImageType
 from graphics.utils.CharacterImage import generate_character_image, get_character_path
 from graphics.utils.definitions import FONTS_DIR, OUTPUT_DIR, THUMBNAIL_DIR
 from graphics.utils.Text import biggest_font_size
-from graphics.utils.types import ThumnbailData
+from graphics.utils.types import ThumbnailData
 
 SIZE = (1920, 1080)
 CHARACTER_BOX = (960, 800)
@@ -48,7 +48,7 @@ def draw_thumbnail_text(text: str, into: ImageType, center: tuple[int, int]) -> 
     )
 
 
-def generate_thumbnail(data: ThumnbailData) -> ImageType:
+def generate_thumbnail(data: ThumbnailData) -> ImageType:
     player_left = data["players"][0]
     player_right = data["players"][1]
     canvas = Image.new("RGBA", SIZE)

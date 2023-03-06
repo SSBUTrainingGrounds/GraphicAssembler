@@ -6,11 +6,11 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QLabel
 
 from graphics.app.generate import generate_thumbnail
-from graphics.utils.types import ThumnbailData
+from graphics.utils.types import ThumbnailData
 
 
 class ImagePreview(QLabel):
-    def __init__(self, data: ThumnbailData) -> None:
+    def __init__(self, data: ThumbnailData) -> None:
         super().__init__()
         self.data = data
         self.threadpool = QThreadPool()
@@ -36,9 +36,9 @@ class ImagePreview(QLabel):
 class Worker(QRunnable):
     def __init__(
         self,
-        fn: Callable[[ThumnbailData], Image],
-        *args: ThumnbailData,
-        **kwargs: ThumnbailData
+        fn: Callable[[ThumbnailData], Image],
+        *args: ThumbnailData,
+        **kwargs: ThumbnailData
     ) -> None:
         super().__init__()
         self.fn = fn

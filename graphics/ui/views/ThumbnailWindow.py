@@ -10,7 +10,7 @@ from graphics.ui.widgets.RoundTextbox import RoundTextbox
 from graphics.ui.widgets.ThumbnailPreview import ImagePreview
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
 from graphics.utils.definitions import ASSET_DIR
-from graphics.utils.types import ThumnbailData
+from graphics.utils.types import ThumbnailData
 
 
 class ThumbnailWindow(QWidget):
@@ -32,7 +32,7 @@ class ThumbnailWindow(QWidget):
         self.timer.setSingleShot(True)
         self.timer.start(self.timer_duration)
 
-        data: ThumnbailData = {
+        data: ThumbnailData = {
             "players": [
                 {
                     "tag": "PLAYER 1",

@@ -13,7 +13,7 @@ class ThumbnailPlayer(TypedDict):
     character: Character
 
 
-class ThumnbailData(TypedDict):
+class ThumbnailData(TypedDict):
     players: list[ThumbnailPlayer]
     tournament: str
     round: str
