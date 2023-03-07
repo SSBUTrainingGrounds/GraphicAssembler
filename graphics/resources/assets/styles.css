@@ -13,3 +13,12 @@ QPushButton {{
 QLabel {{
     font-weight: bold;
 }}
+
+QToolButton {{
+    min-width: 320px;
+    border-radius: 10px;
+    border-width: 0px;
+    padding: 6px;
+    font-size: 14px;
+    color: #777777;
+}}

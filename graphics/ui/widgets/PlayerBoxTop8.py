@@ -20,11 +20,10 @@ class PlayerAccordion(QWidget):
         )
         self.toggle_button.setText(f"Player {player_number + 1}")
         self.toggle_button.setArrowType(Qt.ArrowType.RightArrow)
-
         self.toggle_button.clicked.connect(self.toggle)
 
         self.grid_layout = QGridLayout()
-        self.grid_layout.addWidget(self.toggle_button, 0, 0)
+        self.grid_layout.addWidget(self.toggle_button, 0, 0, 1, 2)
 
         self.tag_textbox = PlayerTag(self.data)
         self.twitter_textbox = PlayerTwitter(self.data)
@@ -41,17 +40,21 @@ class PlayerAccordion(QWidget):
         self.pocket_alt_dropdown = AltDropdown(self.data, "pocket")
         self.pocket_offset_slider = OffsetSlider(self.data, "pocket")
 
+        self.main_offset_slider.setMinimumHeight(150)
+        self.secondary_offset_slider.setMinimumHeight(150)
+        self.pocket_offset_slider.setMinimumHeight(150)
+
         self.grid_layout.addWidget(self.tag_textbox, 1, 0)
-        self.grid_layout.addWidget(self.twitter_textbox, 2, 0)
-        self.grid_layout.addWidget(self.main_dropdown, 3, 0)
-        self.grid_layout.addWidget(self.main_alt_dropdown, 4, 0)
-        self.grid_layout.addWidget(self.main_offset_slider, 5, 0, 2, 1)
-        self.grid_layout.addWidget(self.secondary_dropdown, 7, 0)
-        self.grid_layout.addWidget(self.secondary_alt_dropdown, 8, 0)
-        self.grid_layout.addWidget(self.secondary_offset_slider, 9, 0, 2, 1)
-        self.grid_layout.addWidget(self.pocket_dropdown, 11, 0)
-        self.grid_layout.addWidget(self.pocket_alt_dropdown, 12, 0)
-        self.grid_layout.addWidget(self.pocket_offset_slider, 13, 0, 2, 1)
+        self.grid_layout.addWidget(self.twitter_textbox, 1, 1)
+        self.grid_layout.addWidget(self.main_dropdown, 2, 0)
+        self.grid_layout.addWidget(self.main_alt_dropdown, 2, 1)
+        self.grid_layout.addWidget(self.main_offset_slider, 3, 0, 3, 2)
+        self.grid_layout.addWidget(self.secondary_dropdown, 6, 0)
+        self.grid_layout.addWidget(self.secondary_alt_dropdown, 6, 1)
+        self.grid_layout.addWidget(self.secondary_offset_slider, 7, 0, 3, 2)
+        self.grid_layout.addWidget(self.pocket_dropdown, 10, 0)
+        self.grid_layout.addWidget(self.pocket_alt_dropdown, 10, 1)
+        self.grid_layout.addWidget(self.pocket_offset_slider, 11, 0, 3, 2)
 
         self.player_boxes = [
             self.tag_textbox,

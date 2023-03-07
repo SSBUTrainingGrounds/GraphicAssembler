@@ -18,9 +18,7 @@ class PlayerBox(QWidget):
 
         self.player_label = QLabel(f"Player {player_number}")
         self.player_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.player_label.setStyleSheet(
-            "font-size: 14px; color: #777777; margin-top: 10px; margin-bottom: 10px;"
-        )
+        self.player_label.setStyleSheet("font-size: 14px; color: #777777;")
 
         self.character_dropdown = CharacterDropdown(player_data)
         self.alt_dropdown = AltDropdown(player_data)
