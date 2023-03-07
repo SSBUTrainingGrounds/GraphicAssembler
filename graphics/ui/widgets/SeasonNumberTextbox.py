@@ -34,6 +34,7 @@ class NumberTextbox(QLineEdit):
     def __init__(self, data: Top8Data) -> None:
         super().__init__()
         self.data = data
+        # This is the number of the tournament in the season.
         self.setText(str(data["number"]))
         self.textChanged.connect(lambda: self.update())
 

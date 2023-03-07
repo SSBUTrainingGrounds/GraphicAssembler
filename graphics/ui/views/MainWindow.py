@@ -1,5 +1,5 @@
 from PyQt6.QtGui import QIcon
-from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QMainWindow, QPushButton, QWidget
+from PyQt6.QtWidgets import QGridLayout, QMainWindow, QPushButton, QWidget
 
 from graphics.ui.views.ThumbnailWindow import ThumbnailWindow
 from graphics.ui.views.Top8Window import Top8Window
@@ -14,10 +14,7 @@ class MainWindow(QMainWindow):
         self.resize(300, 200)
         self.setWindowIcon(QIcon(ASSET_DIR + "/icon.png"))
 
-        self.grid = QGridLayout()
-
-        layout = QHBoxLayout()
-        layout.addLayout(self.grid)
+        self.grid_layout = QGridLayout()
 
         self.thumbnail_button = QPushButton("Thumbnail")
         self.top8_button = QPushButton("Top 8")
@@ -25,12 +22,12 @@ class MainWindow(QMainWindow):
         self.thumbnail_button.clicked.connect(self.thumbnail_button_clicked)
         self.top8_button.clicked.connect(self.top8_button_clicked)
 
-        self.grid.addWidget(self.thumbnail_button)
-        self.grid.addWidget(self.top8_button)
+        self.grid_layout.addWidget(self.thumbnail_button)
+        self.grid_layout.addWidget(self.top8_button)
 
         widget = QWidget()
 
-        widget.setLayout(layout)
+        widget.setLayout(self.grid_layout)
 
         self.setCentralWidget(widget)
 

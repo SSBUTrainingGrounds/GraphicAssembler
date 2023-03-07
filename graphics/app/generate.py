@@ -80,26 +80,28 @@ def generate_thumbnail(data: ThumbnailData) -> ImageType:
     canvas.alpha_composite(character_background)
 
     # Player 1 Character
-    canvas.alpha_composite(
-        generate_character_image(
-            character_paths[0],
-            player_left["character"]["offset"],
-            player_left["character"]["zoom"],
-            CHARACTER_BOX,
-        ),
-        POSITION[0],
-    )
+    if character_paths[0]:
+        canvas.alpha_composite(
+            generate_character_image(
+                character_paths[0],
+                player_left["character"]["offset"],
+                player_left["character"]["zoom"],
+                CHARACTER_BOX,
+            ),
+            POSITION[0],
+        )
 
     # Player 2 Character
-    canvas.alpha_composite(
-        generate_character_image(
-            character_paths[1],
-            player_right["character"]["offset"],
-            player_right["character"]["zoom"],
-            CHARACTER_BOX,
-        ),
-        POSITION[1],
-    )
+    if character_paths[1]:
+        canvas.alpha_composite(
+            generate_character_image(
+                character_paths[1],
+                player_right["character"]["offset"],
+                player_right["character"]["zoom"],
+                CHARACTER_BOX,
+            ),
+            POSITION[1],
+        )
 
     # Text Background
     text_background = Image.open(text_background_path, mode="r")

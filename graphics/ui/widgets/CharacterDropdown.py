@@ -8,7 +8,7 @@ from graphics.utils.types import ThumbnailPlayer, Top8Player
 
 
 def get_characters() -> list[str]:
-    return [f.name for f in os.scandir(RENDERS_DIR) if f.is_dir()]
+    return ["None"] + [f.name for f in os.scandir(RENDERS_DIR) if f.is_dir()]
 
 
 class CharacterDropdown(QComboBox):

@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 from PIL import Image
 
@@ -8,9 +9,14 @@ from PIL.Image import Image as ImageType
 from graphics.utils.definitions import RENDERS_DIR
 
 
-def get_character_path(character: str, alt: str = "01") -> str:
+def get_character_path(character: str, alt: str = "01") -> Optional[str]:
+    # We want an option for no character for the Top8 Graphics.
+    if character.lower() == "none":
+        return None
+
     if character.lower() == "random":
         return os.path.join(RENDERS_DIR, "Random/Random.png")
+
     # The Mii Fighters only have one alt.
     if "mii" in character.lower():
         alt = "01"

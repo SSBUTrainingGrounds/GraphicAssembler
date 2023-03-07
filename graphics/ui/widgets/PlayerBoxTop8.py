@@ -41,10 +41,11 @@ class PlayerAccordion(QWidget):
         self.secondary_boxes = self.get_character_boxes("secondary")
         self.pocket_boxes = self.get_character_boxes("pocket")
 
-        # The offset sliders.
-        self.main_boxes[2].setMinimumHeight(150)
-        self.secondary_boxes[2].setMinimumHeight(150)
-        self.pocket_boxes[2].setMinimumHeight(150)
+        # These are the offset sliders. The Offset Y slider needs a minimum height to be usable.
+        # 133 is roughly the width of the Zoom and Offset X sliders.
+        self.main_boxes[2].setMinimumHeight(133)
+        self.secondary_boxes[2].setMinimumHeight(133)
+        self.pocket_boxes[2].setMinimumHeight(133)
 
         self.grid_layout.addWidget(self.tag_label, 1, 0)
         self.grid_layout.addWidget(self.twitter_label, 1, 1)
@@ -73,6 +74,8 @@ class PlayerAccordion(QWidget):
     def get_children(
         self,
     ) -> list[PlayerAccordionChild]:
+        # The children are all of the items that get hidden/shown when the accordion is toggled.
+
         all_children: list[PlayerAccordionChild] = [
             self.tag_label,
             self.twitter_label,

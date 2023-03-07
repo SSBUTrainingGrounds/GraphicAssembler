@@ -11,6 +11,9 @@ class CreateButton(QPushButton):
         self.data = data
         self.setText("Save Image")
         self.clicked.connect(self.button_handler)
+
+        # When we click the button, we want to change the text to "Saved!" for 1 second
+        # Then we want to change it back to "Save Image"
         self.timer = QTimer()
         self.timer.timeout.connect(self.reset_button)
 

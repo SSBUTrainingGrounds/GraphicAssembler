@@ -13,6 +13,7 @@ class ImagePreview(QLabel):
     def __init__(self, data: ThumbnailData) -> None:
         super().__init__()
         self.data = data
+        # Sets up a thread pool for the workers to use.
         self.threadpool = QThreadPool()
         self.setPixmap(
             QPixmap(generate_thumbnail(self.data).toqpixmap()).scaledToHeight(  # type: ignore
@@ -28,6 +29,8 @@ class ImagePreview(QLabel):
         )
 
     def update(self) -> None:
+        # The worker runs in a separate thread, so we don't block the UI.
+        # When the worker is finished, it emits a signal that we connect to.
         worker = Worker(generate_thumbnail, self.data)
         worker.signals.result.connect(self.set_pixmap)
         self.threadpool.start(worker)

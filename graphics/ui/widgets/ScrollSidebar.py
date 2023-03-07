@@ -18,12 +18,11 @@ class ScrollSidebar(QScrollArea):
         layout.setSpacing(0)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
-        player_accordions: list[PlayerAccordion] = []
+        player_accordions: list[PlayerAccordion] = [
+            PlayerAccordion(player, i) for i, player in enumerate(data["players"])
+        ]
 
-        for i, player in enumerate(data["players"]):
-            player_accordions.append(PlayerAccordion(player, i))
-
-        for i, player_accordion in enumerate(player_accordions):
+        for player_accordion in player_accordions:
             layout.addWidget(player_accordion)
 
         self.setFixedWidth(400)

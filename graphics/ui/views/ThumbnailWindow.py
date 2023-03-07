@@ -78,6 +78,7 @@ class ThumbnailWindow(QWidget):
         self.grid.addWidget(player_box_one, 2, 0, 4, 3)
         self.grid.addWidget(player_box_two, 2, 4, 4, 3)
 
+        # This column is empty, to create space between the two players.
         self.grid.setColumnMinimumWidth(3, 40)
 
         self.grid.addWidget(preview, 8, 0, 1, 7, alignment=Qt.AlignmentFlag.AlignCenter)

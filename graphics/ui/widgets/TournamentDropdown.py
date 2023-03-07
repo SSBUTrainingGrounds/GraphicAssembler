@@ -7,6 +7,7 @@ from graphics.utils.types import ThumbnailData, Top8Data
 
 
 def get_tournaments() -> list[str]:
+    # TODO: This may need to get updated for Doubles and Colosseum Top 8 Graphics.
     return [f.name for f in os.scandir(THUMBNAIL_DIR) if f.is_dir()]
 
 
