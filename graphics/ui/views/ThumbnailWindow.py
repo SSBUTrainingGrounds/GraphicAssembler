@@ -4,9 +4,10 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QWidget
 
-from graphics.ui.widgets.CreateThumbnailButton import CreateButton
+from graphics.app.generate import generate_thumbnail
 from graphics.ui.widgets.PlayerBoxThumbnail import PlayerBox
 from graphics.ui.widgets.RoundTextbox import RoundTextbox
+from graphics.ui.widgets.SaveImageButton import SaveImageButton
 from graphics.ui.widgets.ThumbnailPreview import ImagePreview
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
 from graphics.utils.definitions import ASSET_DIR
@@ -65,7 +66,7 @@ class ThumbnailWindow(QWidget):
 
         preview = ImagePreview(data)
 
-        button = CreateButton(data)
+        button = SaveImageButton(data, generate_thumbnail, "thumbnail")
 
         self.grid.addWidget(QLabel("Round"), 0, 0, 1, 3)
         self.grid.addWidget(QLabel("Tournament"), 0, 4, 1, 3)

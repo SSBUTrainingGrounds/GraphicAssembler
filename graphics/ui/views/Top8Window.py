@@ -2,8 +2,10 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QWidget
 
+from graphics.app.generate import generate_top8
 from graphics.ui.widgets.DateTextbox import DateTextbox
 from graphics.ui.widgets.EntrantsTextbox import EntrantsTextbox
+from graphics.ui.widgets.SaveImageButton import SaveImageButton
 from graphics.ui.widgets.ScrollSidebar import ScrollSidebar
 from graphics.ui.widgets.SeasonNumberTextbox import SeasonNumberBox
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
@@ -16,7 +18,7 @@ class Top8Window(QWidget):
         super().__init__()
 
         self.setWindowTitle("TG Graphics (Top 8)")
-        self.resize(1200, 800)
+        self.resize(1200, 850)
         self.setWindowIcon(QIcon(ASSET_DIR + "/icon.png"))
 
         self.grid = QGridLayout()
@@ -41,9 +43,11 @@ class Top8Window(QWidget):
         # Otherwise this would be a bit squished, while the other widgets take up too much space.
         tournament_dropdown.setMinimumWidth(200)
 
-        # TODO: Replace with actual image
+        # TODO: Replace with actual image preview
         placeholder_image = QLabel()
         placeholder_image.setPixmap(QPixmap(round(1920 / 2), round(1080 / 2)))
+
+        button = SaveImageButton(data, generate_top8, "top8")
 
         # The top bar are the columns for the tournament, season, number, date, and entrants above the preview and player sidebar.
         top_bar_layout = QGridLayout()
@@ -72,6 +76,8 @@ class Top8Window(QWidget):
         self.grid.addWidget(self.player_label, 2, 4, Qt.AlignmentFlag.AlignCenter)
 
         self.grid.addWidget(player_sidebar, 3, 4, 15, 3, Qt.AlignmentFlag.AlignHCenter)
+
+        self.grid.addWidget(button, 18, 0, 1, 7, Qt.AlignmentFlag.AlignCenter)
 
         layout.addLayout(self.grid)
 
