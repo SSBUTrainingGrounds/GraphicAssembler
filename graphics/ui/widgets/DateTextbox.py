@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QLineEdit
 
-from graphics.utils.types import Top8Data
+from graphics.utils.Types import Top8Data
 
 
 class DateTextbox(QLineEdit):

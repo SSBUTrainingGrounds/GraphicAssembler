@@ -4,14 +4,14 @@ from PyQt6.QtCore import Qt, QTimer
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QWidget
 
-from graphics.app.generate import generate_thumbnail
+from graphics.app.ThumbnailGenerate import generate_thumbnail
 from graphics.ui.widgets.PlayerBoxThumbnail import PlayerBox
 from graphics.ui.widgets.RoundTextbox import RoundTextbox
 from graphics.ui.widgets.SaveImageButton import SaveImageButton
 from graphics.ui.widgets.ThumbnailPreview import ImagePreview
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
-from graphics.utils.definitions import ASSET_DIR
-from graphics.utils.types import ThumbnailData
+from graphics.utils.Definitions import ASSET_DIR
+from graphics.utils.Types import ThumbnailData
 
 
 class ThumbnailWindow(QWidget):
@@ -86,9 +86,9 @@ class ThumbnailWindow(QWidget):
 
         # Connect all the widgets to the timer
         for child in (
-            [tournament_dropdown]
-            + player_box_one.all_dropdowns
-            + player_box_two.all_dropdowns
+                [tournament_dropdown]
+                + player_box_one.all_dropdowns
+                + player_box_two.all_dropdowns
         ):
             child.currentTextChanged.connect(
                 lambda: (self.timer.start(self.timer_duration))
@@ -102,10 +102,10 @@ class ThumbnailWindow(QWidget):
             child.textChanged.connect(lambda: self.timer.start(self.timer_duration))
 
         for child in list(
-            chain(
-                player_box_one.offset_sliders.all_children,
-                player_box_two.offset_sliders.all_children,
-            )
+                chain(
+                    player_box_one.offset_sliders.all_children,
+                    player_box_two.offset_sliders.all_children,
+                )
         ):
             child.valueChanged.connect(lambda: self.timer.start(self.timer_duration))
 

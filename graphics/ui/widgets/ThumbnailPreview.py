@@ -5,8 +5,8 @@ from PyQt6.QtCore import QObject, QRunnable, Qt, QThreadPool, pyqtSignal
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QLabel
 
-from graphics.app.generate import generate_thumbnail
-from graphics.utils.types import ThumbnailData
+from graphics.app.ThumbnailGenerate import generate_thumbnail
+from graphics.utils.Types import ThumbnailData
 
 
 class ImagePreview(QLabel):
@@ -15,11 +15,7 @@ class ImagePreview(QLabel):
         self.data = data
         # Sets up a thread pool for the workers to use.
         self.threadpool = QThreadPool()
-        self.setPixmap(
-            QPixmap(generate_thumbnail(self.data).toqpixmap()).scaledToHeight(  # type: ignore
-                300, mode=Qt.TransformationMode.SmoothTransformation
-            )
-        )
+        self.set_pixmap(generate_thumbnail(self.data))
 
     def set_pixmap(self, image: Image) -> None:
         self.setPixmap(
@@ -38,10 +34,10 @@ class ImagePreview(QLabel):
 
 class Worker(QRunnable):
     def __init__(
-        self,
-        fn: Callable[[ThumbnailData], Image],
-        *args: ThumbnailData,
-        **kwargs: ThumbnailData
+            self,
+            fn: Callable[[ThumbnailData], Image],
+            *args: ThumbnailData,
+            **kwargs: ThumbnailData
     ) -> None:
         super().__init__()
         self.fn = fn

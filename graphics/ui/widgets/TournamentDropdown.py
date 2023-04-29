@@ -2,13 +2,13 @@ import os
 
 from PyQt6.QtWidgets import QComboBox
 
-from graphics.utils.definitions import THUMBNAIL_DIR
-from graphics.utils.types import ThumbnailData, Top8Data
+from graphics.utils.Definitions import TOP8_DIR
+from graphics.utils.Types import ThumbnailData, Top8Data
 
 
 def get_tournaments() -> list[str]:
     # TODO: This may need to get updated for Doubles and Colosseum Top 8 Graphics.
-    return [f.name for f in os.scandir(THUMBNAIL_DIR) if f.is_dir()]
+    return [f.name for f in os.scandir(TOP8_DIR) if f.is_dir()]
 
 
 class TournamentDropdown(QComboBox):

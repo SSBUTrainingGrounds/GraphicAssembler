@@ -1,4 +1,4 @@
-from typing import TypedDict
+from typing import TypedDict, NotRequired
 
 
 class Character(TypedDict):
@@ -21,11 +21,11 @@ class ThumbnailData(TypedDict):
 
 class Top8Player(TypedDict):
     tag: str
-    twitter: str
+    twitter: NotRequired[str]
     placement: int
     main: Character
-    secondary: Character
-    pocket: Character
+    secondary: NotRequired[Character]
+    pocket: NotRequired[Character]
 
 
 class Top8Data(TypedDict):

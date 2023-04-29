@@ -3,16 +3,17 @@ from typing import Optional
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGridLayout, QLabel, QSlider, QWidget
 
-from graphics.utils.types import ThumbnailPlayer, Top8Player
+from graphics.utils.Types import ThumbnailPlayer, Top8Player
 
 
 class OffsetSlider(QWidget):
     def __init__(
-        self,
-        player_data: ThumbnailPlayer | Top8Player,
-        character_type: Optional[str] = None,
+            self,
+            player_data: ThumbnailPlayer | Top8Player,
+            character_type: Optional[str] = None,
     ) -> None:
         super().__init__()
+
         self.player_data = player_data
 
         self.character_type = character_type
@@ -68,11 +69,14 @@ class OffsetSlider(QWidget):
 
 class HorizontalSlider(QSlider):
     def __init__(
-        self,
-        player_data: ThumbnailPlayer | Top8Player,
-        character_type: Optional[str] = None,
+            self,
+            player_data: ThumbnailPlayer | Top8Player,
+            character_type: Optional[str] = None,
     ) -> None:
         super().__init__()
+
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+
         self.player_data = player_data
         self.character_type = character_type
 
@@ -95,14 +99,23 @@ class HorizontalSlider(QSlider):
     def reset(self):
         self.setValue(0)
 
+    def wheelEvent(self, event) -> None:
+        if self.hasFocus():
+            return QSlider.wheelEvent(self, event)
+        else:
+            event.ignore()
+
 
 class VerticalSlider(QSlider):
     def __init__(
-        self,
-        player_data: ThumbnailPlayer | Top8Player,
-        character_type: Optional[str] = None,
+            self,
+            player_data: ThumbnailPlayer | Top8Player,
+            character_type: Optional[str] = None,
     ) -> None:
         super().__init__()
+
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+
         self.player_data = player_data
         self.character_prefix = character_type
 
@@ -125,14 +138,23 @@ class VerticalSlider(QSlider):
     def reset(self) -> None:
         self.setValue(0)
 
+    def wheelEvent(self, event) -> None:
+        if self.hasFocus():
+            return QSlider.wheelEvent(self, event)
+        else:
+            event.ignore()
+
 
 class ZoomSlider(QSlider):
     def __init__(
-        self,
-        player_data: ThumbnailPlayer | Top8Player,
-        character_type: Optional[str] = None,
+            self,
+            player_data: ThumbnailPlayer | Top8Player,
+            character_type: Optional[str] = None,
     ) -> None:
         super().__init__()
+
+        self.setFocusPolicy(Qt.FocusPolicy.StrongFocus)
+
         self.player_data = player_data
         self.character_type = character_type
 
@@ -151,3 +173,9 @@ class ZoomSlider(QSlider):
 
     def reset(self) -> None:
         self.setValue(100)
+
+    def wheelEvent(self, event) -> None:
+        if self.hasFocus():
+            return QSlider.wheelEvent(self, event)
+        else:
+            event.ignore()

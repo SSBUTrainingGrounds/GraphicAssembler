@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QGridLayout, QLineEdit, QWidget
 
-from graphics.utils.types import Top8Data
+from graphics.utils.Types import Top8Data
 
 
 class SeasonNumberBox(QWidget):

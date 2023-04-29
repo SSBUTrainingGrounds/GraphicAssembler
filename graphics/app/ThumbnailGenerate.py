@@ -7,9 +7,9 @@ from PIL import Image, ImageDraw, ImageFont
 from PIL.Image import Image as ImageType
 
 from graphics.utils.CharacterImage import generate_character_image, get_character_path
-from graphics.utils.definitions import FONTS_DIR, OUTPUT_DIR, THUMBNAIL_DIR
+from graphics.utils.Definitions import FONTS_DIR, OUTPUT_DIR, THUMBNAIL_DIR
 from graphics.utils.Text import biggest_font_size
-from graphics.utils.types import ThumbnailData, Top8Data
+from graphics.utils.Types import ThumbnailData
 
 SIZE = (1920, 1080)
 CHARACTER_BOX = (960, 800)
@@ -120,13 +120,6 @@ def generate_thumbnail(data: ThumbnailData) -> ImageType:
         draw_thumbnail_text("SMASH OVERSEAS", canvas, (1440, 835))
     else:
         draw_thumbnail_text("TRIALS OF SMASH", canvas, (1440, 835))
-
-    return canvas
-
-
-def generate_top8(data: Top8Data) -> ImageType:
-    # TODO: Replace with actual image. Maybe move Top 8 generati0on to its own file?
-    canvas = Image.new("RGBA", SIZE)
 
     return canvas
 

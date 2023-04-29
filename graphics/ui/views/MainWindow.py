@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import QGridLayout, QMainWindow, QPushButton, QWidget
 
 from graphics.ui.views.ThumbnailWindow import ThumbnailWindow
 from graphics.ui.views.Top8Window import Top8Window
-from graphics.utils.definitions import ASSET_DIR
+from graphics.utils.Definitions import ASSET_DIR
 
 
 class MainWindow(QMainWindow):

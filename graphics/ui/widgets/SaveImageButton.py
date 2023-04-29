@@ -4,16 +4,16 @@ from PIL.Image import Image as ImageType
 from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QPushButton
 
-from graphics.app.generate import save_image
-from graphics.utils.types import ThumbnailData, Top8Data
+from graphics.app.ThumbnailGenerate import save_image
+from graphics.utils.Types import ThumbnailData, Top8Data
 
 
 class SaveImageButton(QPushButton):
     def __init__(
-        self,
-        data: ThumbnailData | Top8Data,
-        generate_img_fn: Callable[[Any], ImageType],
-        img_name: str,
+            self,
+            data: ThumbnailData | Top8Data,
+            generate_img_fn: Callable[[Any], ImageType],
+            img_name: str,
     ) -> None:
         super().__init__()
         self.data = data

@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QLineEdit
 
-from graphics.utils.types import ThumbnailData
+from graphics.utils.Types import ThumbnailData
 
 
 class RoundTextbox(QLineEdit):

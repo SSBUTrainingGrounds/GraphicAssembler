@@ -6,7 +6,7 @@ from PIL import Image
 # This is only used for type hinting
 from PIL.Image import Image as ImageType
 
-from graphics.utils.definitions import RENDERS_DIR
+from graphics.utils.Definitions import RENDERS_DIR
 
 
 def get_character_path(character: str, alt: str = "01") -> Optional[str]:
@@ -25,7 +25,7 @@ def get_character_path(character: str, alt: str = "01") -> Optional[str]:
 
 
 def crop_character(
-    image: ImageType, crop: tuple[int, int], offset: tuple[int, int]
+        image: ImageType, crop: tuple[int, int], offset: tuple[int, int]
 ) -> ImageType:
     img_width, img_height = image.size
 
@@ -49,7 +49,7 @@ def resize_character(image: ImageType, zoom: int) -> ImageType:
 
 
 def generate_character_image(
-    path: str, offset: tuple[int, int], zoom: int, character_box: tuple[int, int]
+        path: str, offset: tuple[int, int], zoom: int, character_box: tuple[int, int]
 ) -> ImageType:
     character = Image.open(path, mode="r")
     character = character.convert("RGBA")

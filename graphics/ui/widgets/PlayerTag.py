@@ -1,6 +1,6 @@
 from PyQt6.QtWidgets import QLineEdit
 
-from graphics.utils.types import ThumbnailPlayer, Top8Player
+from graphics.utils.Types import ThumbnailPlayer, Top8Player
 
 
 class PlayerTag(QLineEdit):

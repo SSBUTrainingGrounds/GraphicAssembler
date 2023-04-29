@@ -2,15 +2,16 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QIcon, QPixmap
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QWidget
 
-from graphics.app.generate import generate_top8
+from graphics.app.Top8Generate import generate_top8
 from graphics.ui.widgets.DateTextbox import DateTextbox
 from graphics.ui.widgets.EntrantsTextbox import EntrantsTextbox
 from graphics.ui.widgets.SaveImageButton import SaveImageButton
 from graphics.ui.widgets.ScrollSidebar import ScrollSidebar
 from graphics.ui.widgets.SeasonNumberTextbox import SeasonNumberBox
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
-from graphics.utils.definitions import ASSET_DIR
-from graphics.utils.types import Top8Data, Top8Player
+from graphics.utils.Definitions import ASSET_DIR
+from graphics.utils.Types import Top8Data, Top8Player
+from graphics.utils.Defaults import DEFAULT_CHARACTER
 
 
 class Top8Window(QWidget):
@@ -88,28 +89,10 @@ class Top8Window(QWidget):
 
         for i in range(8):
             player: Top8Player = {
-                "tag": f"Player {i+1}",
-                "twitter": f"@player{i+1}",
+                "tag": f"Player {i + 1}",
                 # The placements are 1, 2, 3, 4, 5, 5, 7, 7
                 "placement": i if (i == 5 or i == 7) else i + 1,
-                "main": {
-                    "name": "01-Mario",
-                    "alt": f"0{i+1}",
-                    "offset": (0, 0),
-                    "zoom": 100,
-                },
-                "secondary": {
-                    "name": "02-Donkey Kong",
-                    "alt": f"0{i+1}",
-                    "offset": (200, 200),
-                    "zoom": 90,
-                },
-                "pocket": {
-                    "name": "03-Link",
-                    "alt": f"0{i+1}",
-                    "offset": (200, -200),
-                    "zoom": 80,
-                },
+                "main": DEFAULT_CHARACTER,
             }
 
             players.append(player)

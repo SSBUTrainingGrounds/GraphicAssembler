@@ -6,9 +6,9 @@ ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 with open("./config.json") as f:
     config = json.load(f)
 
-
 RESOURCES_DIR = os.path.join(ROOT_DIR, "resources")
 THUMBNAIL_DIR = os.path.join(RESOURCES_DIR, "thumbnail")
+TOP8_DIR = os.path.join(RESOURCES_DIR, "top-8")
 FONTS_DIR = os.path.join(RESOURCES_DIR, "fonts")
 ASSET_DIR = os.path.join(RESOURCES_DIR, "assets")
 

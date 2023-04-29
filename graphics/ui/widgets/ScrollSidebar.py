@@ -2,7 +2,7 @@ from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QScrollArea, QVBoxLayout, QWidget
 
 from graphics.ui.widgets.PlayerBoxTop8 import PlayerAccordion
-from graphics.utils.types import Top8Data
+from graphics.utils.Types import Top8Data
 
 
 class ScrollSidebar(QScrollArea):
