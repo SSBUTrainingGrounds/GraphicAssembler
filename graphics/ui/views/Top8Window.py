@@ -1,5 +1,5 @@
-from PyQt6.QtCore import Qt
-from PyQt6.QtGui import QIcon, QPixmap
+from PyQt6.QtCore import Qt, QTimer
+from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QGridLayout, QHBoxLayout, QLabel, QWidget
 
 from graphics.app.Top8Generate import generate_top8
@@ -9,6 +9,7 @@ from graphics.ui.widgets.SaveImageButton import SaveImageButton
 from graphics.ui.widgets.ScrollSidebar import ScrollSidebar
 from graphics.ui.widgets.SeasonNumberTextbox import SeasonNumberBox
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
+from graphics.ui.widgets.Top8Preview import ImagePreview
 from graphics.utils.Definitions import ASSET_DIR
 from graphics.utils.Types import Top8Data, Top8Player
 from graphics.utils.Defaults import DEFAULT_CHARACTER
@@ -23,8 +24,14 @@ class Top8Window(QWidget):
         self.setWindowIcon(QIcon(ASSET_DIR + "/icon.png"))
 
         self.grid = QGridLayout()
+        self.timer_duration = 100  # Timer in milliseconds
 
         layout = QHBoxLayout()
+
+        self.timer = QTimer()
+        self.timer.timeout.connect(self.update)
+        self.timer.setSingleShot(True)
+        self.timer.start(self.timer_duration)
 
         data: Top8Data = {
             "players": self.get_default_players(),
@@ -40,17 +47,16 @@ class Top8Window(QWidget):
         date_textbox = DateTextbox(data)
         entrants_textbox = EntrantsTextbox(data)
         player_sidebar = ScrollSidebar(data)
+        preview = ImagePreview(data)
 
         # Otherwise this would be a bit squished, while the other widgets take up too much space.
         tournament_dropdown.setMinimumWidth(200)
 
-        # TODO: Replace with actual image preview
-        placeholder_image = QLabel()
-        placeholder_image.setPixmap(QPixmap(round(1920 / 2), round(1080 / 2)))
-
         button = SaveImageButton(data, generate_top8, "top8")
 
-        # The top bar are the columns for the tournament, season, number, date, and entrants above the preview and player sidebar.
+        # The top bar are the columns for the tournament, season,
+        # number, date, and entrants above the preview and player sidebar.
+
         top_bar_layout = QGridLayout()
 
         top_bar_layout.addWidget(
@@ -70,7 +76,7 @@ class Top8Window(QWidget):
 
         self.grid.addLayout(top_bar_layout, 0, 0, 1, 7)
 
-        self.grid.addWidget(placeholder_image, 2, 0, 15, 4)
+        self.grid.addWidget(preview, 2, 0, 15, 4)
 
         self.player_label = QLabel("Players")
         self.player_label.setStyleSheet("font-size: 14px; color: #777777;")
@@ -81,6 +87,25 @@ class Top8Window(QWidget):
         self.grid.addWidget(button, 18, 0, 1, 7, Qt.AlignmentFlag.AlignCenter)
 
         layout.addLayout(self.grid)
+
+        # Connect all the widgets to the timer
+        for child in (
+            [tournament_dropdown]
+            # TODO: need to add player dropdowns
+        ):
+            child.currentTextChanged.connect(
+                lambda: (self.timer.start(self.timer_duration))
+            )
+
+        for child in ([
+            date_textbox,
+            entrants_textbox]
+            + season_number_box.get_all_textbox
+        ):
+            child.textChanged.connect(lambda: self.timer.start(self.timer_duration))
+
+        # Connect the timer to the preview
+        self.timer.timeout.connect(preview.update)
 
         self.setLayout(layout)
 

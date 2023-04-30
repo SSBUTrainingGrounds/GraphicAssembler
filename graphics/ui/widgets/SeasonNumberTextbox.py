@@ -16,6 +16,8 @@ class SeasonNumberBox(QWidget):
         self.grid_layout.addWidget(self.season, 0, 0)
         self.grid_layout.addWidget(self.number, 0, 1)
 
+        self.get_all_textbox = [self.season, self.number]
+
         self.setLayout(self.grid_layout)
 
 
@@ -27,7 +29,8 @@ class SeasonTextbox(QLineEdit):
         self.textChanged.connect(lambda: self.update())
 
     def update(self) -> None:
-        self.data["season"] = int(self.text())
+        if self.text():
+            self.data["season"] = int(self.text())
 
 
 class NumberTextbox(QLineEdit):
@@ -39,4 +42,5 @@ class NumberTextbox(QLineEdit):
         self.textChanged.connect(lambda: self.update())
 
     def update(self) -> None:
-        self.data["number"] = int(self.text())
+        if self.text():
+            self.data["number"] = int(self.text())

@@ -8,7 +8,8 @@ class EntrantsTextbox(QLineEdit):
         super().__init__()
         self.data = data
         self.setText(str(data["entrants"]))
-        self.textChanged.connect(lambda: self.update())
+        self.textEdited.connect(lambda: self.update())
 
     def update(self) -> None:
-        self.data["entrants"] = int(self.text())
+        if self.text():
+            self.data["entrants"] = int(self.text())

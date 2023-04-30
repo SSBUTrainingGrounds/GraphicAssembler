@@ -39,10 +39,10 @@ def crop_character(
     )
 
 
-def resize_character(image: ImageType, zoom: int) -> ImageType:
+def resize_character(image: ImageType, zoom: int, desired_width: int) -> ImageType:
     width_one, height_one = image.size
-    if width_one > 960:
-        factor = 960 / width_one
+    if width_one > desired_width:
+        factor = desired_width / width_one
         width_one = int(width_one * factor * zoom / 100)
         height_one = int(height_one * factor * zoom / 100)
     return image.resize((width_one, height_one))
@@ -53,6 +53,6 @@ def generate_character_image(
 ) -> ImageType:
     character = Image.open(path, mode="r")
     character = character.convert("RGBA")
-    character = resize_character(character, zoom)
+    character = resize_character(character, zoom, character_box[0])
     character = crop_character(character, character_box, offset)
     return character
