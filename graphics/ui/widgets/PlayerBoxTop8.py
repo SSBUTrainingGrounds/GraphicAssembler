@@ -1,25 +1,39 @@
 from enum import Enum
-from typing import List
+from typing import Union
 
 from PyQt6.QtCore import Qt
-from PyQt6.QtWidgets import QGridLayout, QLabel, QToolButton, QPushButton, QWidget
+
+# For type hinting
+from PyQt6.QtWidgets import QComboBox as Dropdown
+from PyQt6.QtWidgets import QGridLayout, QLabel
+from PyQt6.QtWidgets import QLineEdit as Textbox
+from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QSlider as Slider
+from PyQt6.QtWidgets import QToolButton, QWidget
 
 from graphics.ui.widgets.AltDropdown import AltDropdown
 from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
-from graphics.ui.widgets.OffsetSlider import OffsetSlider, HorizontalSlider, VerticalSlider, ZoomSlider
+from graphics.ui.widgets.OffsetSlider import (
+    HorizontalSlider,
+    OffsetSlider,
+    VerticalSlider,
+    ZoomSlider,
+)
 from graphics.ui.widgets.PlayerTag import PlayerTag
 from graphics.ui.widgets.PlayerTwitter import PlayerTwitter
-from graphics.utils.Types import Top8Player
 from graphics.utils.Defaults import DEFAULT_CHARACTER
+from graphics.utils.Types import Top8Player
 
 # For type hinting
-from PyQt6.QtWidgets import QComboBox as Dropdown, QLineEdit as Textbox, QSlider as Slider
-
-
-# For type hinting
-PlayerAccordionChild = (
-        CharacterDropdown | AltDropdown | OffsetSlider | QLabel | PlayerTag | PlayerTwitter
-)
+PlayerAccordionChild = Union[
+    CharacterDropdown,
+    AltDropdown,
+    OffsetSlider,
+    QLabel,
+    PlayerTag,
+    PlayerTwitter,
+    QPushButton,
+]
 
 
 class Character(Enum):
@@ -47,17 +61,21 @@ class PlayerAccordion(QWidget):
         self.toggle_button.clicked.connect(self.toggle)
 
         self.add_character = QPushButton()
-        self.add_character.setStyleSheet("""
+        self.add_character.setStyleSheet(
+            """
             font-size: 12px;
-        """)
+        """
+        )
         self.add_character.setText(f"Add Character")
         self.add_character.clicked.connect(self.new_character)
 
         self.delete_character = QPushButton()
         self.delete_character.setText(f"Delete Character")
-        self.delete_character.setStyleSheet("""
+        self.delete_character.setStyleSheet(
+            """
             font-size: 12px;
-        """)
+        """
+        )
         self.delete_character.clicked.connect(self.remove_character)
         self.delete_character.setDisabled(True)
 
@@ -76,8 +94,12 @@ class PlayerAccordion(QWidget):
         self.grid_layout.addWidget(self.tag_textbox, 2, 0)
         self.grid_layout.addWidget(self.twitter_textbox, 2, 1)
 
-        self.grid_layout.addWidget(self.add_character, 3, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
-        self.grid_layout.addWidget(self.delete_character, 3, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.grid_layout.addWidget(
+            self.add_character, 3, 0, alignment=Qt.AlignmentFlag.AlignHCenter
+        )
+        self.grid_layout.addWidget(
+            self.delete_character, 3, 1, alignment=Qt.AlignmentFlag.AlignHCenter
+        )
 
         [self.main_layout, self.main_boxes] = self.setup_character()
         self.grid_layout.addLayout(self.main_layout, 4, 0, 2, 0)
@@ -91,9 +113,7 @@ class PlayerAccordion(QWidget):
 
         self.setLayout(self.grid_layout)
 
-    def get_children(
-            self,
-    ) -> list[PlayerAccordionChild]:
+    def get_children(self) -> list[PlayerAccordionChild]:
         # The children are all the items that get hidden/shown when the accordion is toggled.
 
         all_children: list[PlayerAccordionChild] = [
@@ -137,11 +157,14 @@ class PlayerAccordion(QWidget):
             QLabel(character_type.capitalize()),
         ]
 
-    def setup_character(self) -> [QGridLayout, list[PlayerAccordionChild]]:
+    def setup_character(self) -> tuple[QGridLayout, list[PlayerAccordionChild]]:
         character_grid = QGridLayout()
         character_boxes = self.get_character_boxes(self.current_character.value)
 
         character_boxes[2].setMinimumHeight(133)
+
+        # Need to re-do the label since it will get deleted when the layout is cleared.
+        self.alt_label = QLabel("Alt")
 
         character_grid.addWidget(character_boxes[3], 0, 0)
         character_grid.addWidget(self.alt_label, 0, 1)
@@ -177,6 +200,9 @@ class PlayerAccordion(QWidget):
 
                 self.add_character.setDisabled(True)
 
+            case _:
+                pass
+
         self.show_content()
 
     def remove_character(self) -> None:
@@ -188,7 +214,18 @@ class PlayerAccordion(QWidget):
 
                 self.data.pop("secondary")
 
-                self.secondary_layout = None
+                if self.secondary_layout:
+                    # This completely clears the layout and deletes all the widgets.
+                    while self.secondary_layout.count():
+                        item = self.secondary_layout.takeAt(0)
+                        widget = item.widget()
+
+                        widget.deleteLater()
+
+                    self.secondary_layout.deleteLater()
+                    self.grid_layout.removeItem(self.secondary_layout)
+                    self.secondary_layout = None
+
                 self.secondary_boxes = None
 
                 self.delete_character.setDisabled(True)
@@ -200,12 +237,22 @@ class PlayerAccordion(QWidget):
 
                 self.data.pop("pocket")
 
-                self.pocket_layout.deleteLater()
-                self.grid_layout.removeItem(self.pocket_layout)
-                del self.pocket_layout
+                if self.pocket_layout:
+                    while self.pocket_layout.count():
+                        item = self.pocket_layout.takeAt(0)
+                        widget = item.widget()
+
+                        widget.deleteLater()
+
+                    self.pocket_layout.deleteLater()
+                    self.grid_layout.removeItem(self.pocket_layout)
+                    self.pocket_layout = None
                 self.pocket_boxes = None
 
                 self.add_character.setDisabled(False)
+
+            case _:
+                pass
 
         self.show_content()
 
