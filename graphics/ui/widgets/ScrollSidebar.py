@@ -14,6 +14,7 @@ class ScrollSidebar(QScrollArea):
         widget = QWidget()
         self.setWidget(widget)
 
+        self.all_children = []
         layout = QVBoxLayout(widget)
         layout.setSpacing(0)
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
@@ -24,6 +25,28 @@ class ScrollSidebar(QScrollArea):
 
         for player_accordion in player_accordions:
             layout.addWidget(player_accordion)
+            self.all_children.append(player_accordion)
 
         self.setFixedWidth(400)
         self.setWidgetResizable(True)
+
+    def all_dropdown(self):
+        dropdowns = []
+        for child in self.all_children:
+            dropdowns.extend(child.all_dropdown())
+
+        return dropdowns
+
+    def all_textbox(self):
+        textboxes = []
+        for child in self.all_children:
+            textboxes.extend(child.all_textbox())
+
+        return textboxes
+
+    def all_slider(self):
+        sliders = []
+        for child in self.all_children:
+            sliders.extend(child.all_slider())
+
+        return sliders

@@ -1,5 +1,6 @@
 from typing import Optional
 
+from PyQt6 import QtCore
 from PyQt6.QtWidgets import QComboBox
 
 from graphics.utils.Types import ThumbnailPlayer, Top8Player
@@ -12,6 +13,9 @@ class AltDropdown(QComboBox):
             character_type: Optional[str] = None,
     ) -> None:
         super().__init__()
+
+        self.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
+
         self.player_data = player_data
 
         self.character_type = character_type
@@ -29,3 +33,9 @@ class AltDropdown(QComboBox):
 
     def reset(self) -> None:
         self.setCurrentText("01")
+
+    def wheelEvent(self, event) -> None:
+        if self.hasFocus():
+            return QComboBox.wheelEvent(self, event)
+        else:
+            event.ignore()

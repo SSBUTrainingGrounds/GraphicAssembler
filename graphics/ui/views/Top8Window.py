@@ -91,7 +91,7 @@ class Top8Window(QWidget):
         # Connect all the widgets to the timer
         for child in (
             [tournament_dropdown]
-            # TODO: need to add player dropdowns
+            + player_sidebar.all_dropdown()
         ):
             child.currentTextChanged.connect(
                 lambda: (self.timer.start(self.timer_duration))
@@ -101,8 +101,12 @@ class Top8Window(QWidget):
             date_textbox,
             entrants_textbox]
             + season_number_box.get_all_textbox
+            + player_sidebar.all_textbox()
         ):
             child.textChanged.connect(lambda: self.timer.start(self.timer_duration))
+
+        for child in player_sidebar.all_slider():
+            child.valueChanged.connect(lambda: self.timer.start(self.timer_duration))
 
         # Connect the timer to the preview
         self.timer.timeout.connect(preview.update)
@@ -117,7 +121,7 @@ class Top8Window(QWidget):
                 "tag": f"Player {i + 1}",
                 # The placements are 1, 2, 3, 4, 5, 5, 7, 7
                 "placement": i if (i == 5 or i == 7) else i + 1,
-                "main": DEFAULT_CHARACTER,
+                "main": DEFAULT_CHARACTER.copy(),
             }
 
             players.append(player)

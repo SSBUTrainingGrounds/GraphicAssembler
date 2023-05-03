@@ -1,15 +1,20 @@
 from enum import Enum
+from typing import List
 
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QGridLayout, QLabel, QToolButton, QPushButton, QWidget
 
 from graphics.ui.widgets.AltDropdown import AltDropdown
 from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
-from graphics.ui.widgets.OffsetSlider import OffsetSlider
+from graphics.ui.widgets.OffsetSlider import OffsetSlider, HorizontalSlider, VerticalSlider, ZoomSlider
 from graphics.ui.widgets.PlayerTag import PlayerTag
 from graphics.ui.widgets.PlayerTwitter import PlayerTwitter
 from graphics.utils.Types import Top8Player
 from graphics.utils.Defaults import DEFAULT_CHARACTER
+
+# For type hinting
+from PyQt6.QtWidgets import QComboBox as Dropdown, QLineEdit as Textbox, QSlider as Slider
+
 
 # For type hinting
 PlayerAccordionChild = (
@@ -42,8 +47,19 @@ class PlayerAccordion(QWidget):
         self.toggle_button.clicked.connect(self.toggle)
 
         self.add_character = QPushButton()
-        self.add_character.setText(f"Add Secondary")
+        self.add_character.setStyleSheet("""
+            font-size: 12px;
+        """)
+        self.add_character.setText(f"Add Character")
         self.add_character.clicked.connect(self.new_character)
+
+        self.delete_character = QPushButton()
+        self.delete_character.setText(f"Delete Character")
+        self.delete_character.setStyleSheet("""
+            font-size: 12px;
+        """)
+        self.delete_character.clicked.connect(self.remove_character)
+        self.delete_character.setDisabled(True)
 
         self.grid_layout = QGridLayout()
         self.grid_layout.addWidget(self.toggle_button, 0, 0, 1, 2)
@@ -61,6 +77,7 @@ class PlayerAccordion(QWidget):
         self.grid_layout.addWidget(self.twitter_textbox, 2, 1)
 
         self.grid_layout.addWidget(self.add_character, 3, 0, alignment=Qt.AlignmentFlag.AlignHCenter)
+        self.grid_layout.addWidget(self.delete_character, 3, 1, alignment=Qt.AlignmentFlag.AlignHCenter)
 
         [self.main_layout, self.main_boxes] = self.setup_character()
         self.grid_layout.addLayout(self.main_layout, 4, 0, 2, 0)
@@ -86,6 +103,7 @@ class PlayerAccordion(QWidget):
             self.twitter_textbox,
             self.alt_label,
             self.add_character,
+            self.delete_character,
         ]
         all_children.extend(self.main_boxes)
         if self.secondary_boxes:
@@ -134,24 +152,25 @@ class PlayerAccordion(QWidget):
         return character_grid, character_boxes
 
     def new_character(self) -> None:
-        match self.next_character:
-            case Character.SECONDARY:
+        match self.current_character:
+            case Character.MAIN:
                 self.previous_character = self.current_character
                 self.current_character = self.next_character
                 self.next_character = Character.POCKET
 
-                self.data["secondary"] = DEFAULT_CHARACTER
+                self.data["secondary"] = DEFAULT_CHARACTER.copy()
 
                 [self.secondary_layout, self.secondary_boxes] = self.setup_character()
                 self.grid_layout.addLayout(self.secondary_layout, 6, 0, 2, 0)
 
-                self.add_character.setText("Add Pocket")
+                self.delete_character.setDisabled(False)
 
-            case Character.POCKET:
+            case Character.SECONDARY:
                 self.previous_character = self.current_character
                 self.current_character = self.next_character
+                self.next_character = None
 
-                self.data["pocket"] = DEFAULT_CHARACTER
+                self.data["pocket"] = DEFAULT_CHARACTER.copy()
 
                 [self.pocket_layout, self.pocket_boxes] = self.setup_character()
                 self.grid_layout.addLayout(self.pocket_layout, 8, 0, 2, 0)
@@ -160,6 +179,56 @@ class PlayerAccordion(QWidget):
 
         self.show_content()
 
-    # def delete_character(self) -> None:
+    def remove_character(self) -> None:
+        match self.current_character:
+            case Character.SECONDARY:
+                self.next_character = self.current_character
+                self.current_character = self.previous_character
+                self.previous_character = None
 
-    # TODO: Create Delete Character Buttons
+                self.data.pop("secondary")
+
+                self.secondary_layout = None
+                self.secondary_boxes = None
+
+                self.delete_character.setDisabled(True)
+
+            case Character.POCKET:
+                self.next_character = self.current_character
+                self.current_character = self.previous_character
+                self.previous_character = Character.MAIN
+
+                self.data.pop("pocket")
+
+                self.pocket_layout.deleteLater()
+                self.grid_layout.removeItem(self.pocket_layout)
+                del self.pocket_layout
+                self.pocket_boxes = None
+
+                self.add_character.setDisabled(False)
+
+        self.show_content()
+
+    def all_dropdown(self) -> list[Dropdown]:
+        dropdowns = []
+        for player_box in self.get_children():
+            if isinstance(player_box, Dropdown):
+                dropdowns.append(player_box)
+
+        return dropdowns
+
+    def all_textbox(self) -> list[Textbox]:
+        textboxes = []
+        for player_box in self.get_children():
+            if isinstance(player_box, Textbox):
+                textboxes.append(player_box)
+
+        return textboxes
+
+    def all_slider(self) -> list[HorizontalSlider | VerticalSlider | ZoomSlider]:
+        sliders = []
+        for player_box in self.get_children():
+            if isinstance(player_box, OffsetSlider):
+                sliders.extend(player_box.all_children)
+
+        return sliders
