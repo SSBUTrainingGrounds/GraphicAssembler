@@ -2,8 +2,9 @@ import json
 import os
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SETTINGS_PATH = "./config.json"
 
-with open("./config.json") as f:
+with open(SETTINGS_PATH) as f:
     config = json.load(f)
 
 RESOURCES_DIR = os.path.join(ROOT_DIR, "resources")

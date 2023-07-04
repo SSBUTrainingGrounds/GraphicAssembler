@@ -22,3 +22,7 @@ QToolButton {{
     font-size: 14px;
     color: #777777;
 }}
+
+QLineEdit:read-only {{
+    font-color: #777777;
+}}

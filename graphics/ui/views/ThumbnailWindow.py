@@ -10,6 +10,7 @@ from graphics.ui.widgets.RoundTextbox import RoundTextbox
 from graphics.ui.widgets.SaveImageButton import SaveImageButton
 from graphics.ui.widgets.ThumbnailPreview import ImagePreview
 from graphics.ui.widgets.TournamentDropdown import TournamentDropdown
+from graphics.utils.Defaults import DEFAULT_CHARACTER
 from graphics.utils.Definitions import ASSET_DIR
 from graphics.utils.Types import ThumbnailData
 
@@ -37,21 +38,11 @@ class ThumbnailWindow(QWidget):
             "players": [
                 {
                     "tag": "PLAYER 1",
-                    "character": {
-                        "name": "01-Mario",
-                        "alt": "01",
-                        "offset": (0, 0),
-                        "zoom": 100,
-                    },
+                    "character": DEFAULT_CHARACTER.copy()
                 },
                 {
                     "tag": "PLAYER 2",
-                    "character": {
-                        "name": "02-Donkey Kong",
-                        "alt": "01",
-                        "offset": (0, 0),
-                        "zoom": 100,
-                    },
+                    "character": DEFAULT_CHARACTER.copy()
                 },
             ],
             "tournament": "tos",

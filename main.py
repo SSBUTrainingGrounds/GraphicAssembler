@@ -3,11 +3,17 @@ import sys
 from PyQt6.QtWidgets import QApplication
 from qt_material import apply_stylesheet  # type: ignore
 
+from graphics.ui.views.SetupWindow import SetupWindow
+from graphics.utils.SettingsManager import settings_manager
 from graphics.ui.views.MainWindow import MainWindow
 
 app = QApplication(sys.argv)
 
-window = MainWindow()
+if settings_manager.get_setting_value("configured"):
+    window = MainWindow()
+else:
+    window = SetupWindow()
+
 window.show()
 
 extra = {}
