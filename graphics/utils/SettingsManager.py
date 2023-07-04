@@ -1,10 +1,15 @@
-import json
+import json, os
 
-from graphics.utils.Definitions import SETTINGS_PATH
+from graphics.utils.Defaults import DEFAULT_SETTINGS
 
 
 class SettingsManager:
     def __init__(self, file) -> None:
+        if not os.path.exists(file):
+            default_settings = json.dumps(DEFAULT_SETTINGS.copy(), indent=4)
+            with open(file, "w") as json_file:
+                json_file.write(default_settings)
+
         self.json_file = file
         self.setting_data = self.read_settings()
 
@@ -27,4 +32,4 @@ class SettingsManager:
             json_file.write(new_settings)
 
 
-settings_manager = SettingsManager(SETTINGS_PATH)
+settings_manager = SettingsManager("./config.json")
