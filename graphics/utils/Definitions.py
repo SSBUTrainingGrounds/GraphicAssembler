@@ -1,10 +1,7 @@
-import json
 import os
+from graphics.utils.SettingsManager import settings_manager
 
 ROOT_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-with open("./config.json") as f:
-    config = json.load(f)
 
 RESOURCES_DIR = os.path.join(ROOT_DIR, "resources")
 THUMBNAIL_DIR = os.path.join(RESOURCES_DIR, "thumbnail")
@@ -15,5 +12,5 @@ ASSET_DIR = os.path.join(RESOURCES_DIR, "assets")
 APP_DIR = os.path.join(ROOT_DIR, "app")
 UI_DIR = os.path.join(ROOT_DIR, "ui")
 
-OUTPUT_DIR = config["output_dir"]
-RENDERS_DIR = config["render_dir"]
+OUTPUT_DIR = settings_manager.get_setting_value("output_dir")
+RENDERS_DIR = settings_manager.get_setting_value("render_dir")
