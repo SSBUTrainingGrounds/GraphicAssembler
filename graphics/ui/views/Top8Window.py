@@ -46,7 +46,7 @@ class Top8Window(QWidget):
         season_number_box = SeasonNumberBox(data)
         date_textbox = DateTextbox(data)
         entrants_textbox = EntrantsTextbox(data)
-        player_sidebar = ScrollSidebar(data)
+        player_sidebar = ScrollSidebar(data, parent=self)
         preview = ImagePreview(data)
 
         # Otherwise this would be a bit squished, while the other widgets take up too much space.
@@ -107,6 +107,9 @@ class Top8Window(QWidget):
 
         for child in player_sidebar.all_slider():
             child.valueChanged.connect(lambda: self.timer.start(self.timer_duration))
+
+        for child in player_sidebar.all_button():
+            child.clicked.connect(lambda: self.timer.start(self.timer_duration))
 
         # Connect the timer to the preview
         self.timer.timeout.connect(preview.update)

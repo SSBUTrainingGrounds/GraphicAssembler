@@ -57,7 +57,7 @@ def generate_player_card(placing: int, tournament: str, player_data: Top8Player)
     if "secondary" in player_data:
         character_paths.append(get_character_path(player_data["secondary"]["name"], player_data["secondary"]["alt"]))
     if "pocket" in player_data:
-        character_paths.append(get_character_path(player_data["secondary"]["name"], player_data["secondary"]["alt"]))
+        character_paths.append(get_character_path(player_data["pocket"]["name"], player_data["pocket"]["alt"]))
 
     char_number = len(character_paths)
     character_type = None

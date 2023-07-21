@@ -6,10 +6,11 @@ from graphics.utils.Types import Top8Data
 
 
 class ScrollSidebar(QScrollArea):
-    def __init__(self, data: Top8Data):
+    def __init__(self, data: Top8Data, parent=None):
         super().__init__()
 
         self.data = data
+        self.parent_window = parent
 
         widget = QWidget()
         self.setWidget(widget)
@@ -20,7 +21,7 @@ class ScrollSidebar(QScrollArea):
         layout.setAlignment(Qt.AlignmentFlag.AlignTop)
 
         player_accordions: list[PlayerAccordion] = [
-            PlayerAccordion(player, i) for i, player in enumerate(data["players"])
+            PlayerAccordion(player, i, parent=self) for i, player in enumerate(data["players"])
         ]
 
         for player_accordion in player_accordions:
@@ -50,3 +51,10 @@ class ScrollSidebar(QScrollArea):
             sliders.extend(child.all_slider())
 
         return sliders
+
+    def all_button(self):
+        buttons = []
+        for child in self.all_children:
+            buttons.extend(child.all_button())
+
+        return buttons

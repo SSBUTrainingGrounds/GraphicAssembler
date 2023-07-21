@@ -2,13 +2,13 @@ from enum import Enum
 from typing import Union
 
 from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QPushButton
 
 # For type hinting
 from PyQt6.QtWidgets import QComboBox as Dropdown
 from PyQt6.QtWidgets import QGridLayout, QLabel
 from PyQt6.QtWidgets import QLineEdit as Textbox
-from PyQt6.QtWidgets import QPushButton
-from PyQt6.QtWidgets import QSlider as Slider
+from PyQt6.QtWidgets import QPushButton as Button
 from PyQt6.QtWidgets import QToolButton, QWidget
 
 from graphics.ui.widgets.AltDropdown import AltDropdown
@@ -21,6 +21,7 @@ from graphics.ui.widgets.OffsetSlider import (
 )
 from graphics.ui.widgets.PlayerTag import PlayerTag
 from graphics.ui.widgets.PlayerTwitter import PlayerTwitter
+from graphics.utils.TimerConnection import connect_character_dropdown, connect_character_sliders
 from graphics.utils.Defaults import DEFAULT_CHARACTER
 from graphics.utils.Types import Top8Player
 
@@ -43,8 +44,12 @@ class Character(Enum):
 
 
 class PlayerAccordion(QWidget):
-    def __init__(self, player_data: Top8Player, player_number: int):
+    def __init__(self, player_data: Top8Player, player_number: int, parent=None):
         super().__init__()
+
+        # HACK to make timers work
+        self.parent_window = parent
+        self.top_parent = self.get_top_level_parent()
 
         self.previous_character = None
         self.current_character = Character.MAIN
@@ -87,8 +92,6 @@ class PlayerAccordion(QWidget):
         self.twitter_label = QLabel("Twitter")
         self.twitter_textbox = PlayerTwitter(self.data)
 
-        self.alt_label = QLabel("Alt")
-
         self.grid_layout.addWidget(self.tag_label, 1, 0)
         self.grid_layout.addWidget(self.twitter_label, 1, 1)
         self.grid_layout.addWidget(self.tag_textbox, 2, 0)
@@ -113,6 +116,10 @@ class PlayerAccordion(QWidget):
 
         self.setLayout(self.grid_layout)
 
+    def get_top_level_parent(self):
+        parent = self.parent_window
+        return parent.parent_window
+
     def get_children(self) -> list[PlayerAccordionChild]:
         # The children are all the items that get hidden/shown when the accordion is toggled.
 
@@ -121,7 +128,6 @@ class PlayerAccordion(QWidget):
             self.twitter_label,
             self.tag_textbox,
             self.twitter_textbox,
-            self.alt_label,
             self.add_character,
             self.delete_character,
         ]
@@ -155,6 +161,7 @@ class PlayerAccordion(QWidget):
             AltDropdown(self.data, character_type),
             OffsetSlider(self.data, character_type),
             QLabel(character_type.capitalize()),
+            QLabel("Alt"),
         ]
 
     def setup_character(self) -> tuple[QGridLayout, list[PlayerAccordionChild]]:
@@ -163,11 +170,8 @@ class PlayerAccordion(QWidget):
 
         character_boxes[2].setMinimumHeight(133)
 
-        # Need to re-do the label since it will get deleted when the layout is cleared.
-        self.alt_label = QLabel("Alt")
-
         character_grid.addWidget(character_boxes[3], 0, 0)
-        character_grid.addWidget(self.alt_label, 0, 1)
+        character_grid.addWidget(character_boxes[4], 0, 1)
         character_grid.addWidget(character_boxes[0], 1, 0)
         character_grid.addWidget(character_boxes[1], 1, 1)
         character_grid.addWidget(character_boxes[2], 2, 0, 3, 2)
@@ -186,6 +190,9 @@ class PlayerAccordion(QWidget):
                 [self.secondary_layout, self.secondary_boxes] = self.setup_character()
                 self.grid_layout.addLayout(self.secondary_layout, 6, 0, 2, 0)
 
+                connect_character_dropdown(self.top_parent, self.secondary_boxes)
+                connect_character_sliders(self.top_parent, self.secondary_boxes)
+
                 self.delete_character.setDisabled(False)
 
             case Character.SECONDARY:
@@ -197,6 +204,9 @@ class PlayerAccordion(QWidget):
 
                 [self.pocket_layout, self.pocket_boxes] = self.setup_character()
                 self.grid_layout.addLayout(self.pocket_layout, 8, 0, 2, 0)
+
+                connect_character_dropdown(self.top_parent, self.pocket_boxes)
+                connect_character_sliders(self.top_parent, self.pocket_boxes)
 
                 self.add_character.setDisabled(True)
 
@@ -247,6 +257,7 @@ class PlayerAccordion(QWidget):
                     self.pocket_layout.deleteLater()
                     self.grid_layout.removeItem(self.pocket_layout)
                     self.pocket_layout = None
+
                 self.pocket_boxes = None
 
                 self.add_character.setDisabled(False)
@@ -279,3 +290,11 @@ class PlayerAccordion(QWidget):
                 sliders.extend(player_box.all_children)
 
         return sliders
+
+    def all_button(self) -> list[Button]:
+        buttons = []
+        for player_box in self.get_children():
+            if isinstance(player_box, Button):
+                buttons.append(player_box)
+
+        return buttons
