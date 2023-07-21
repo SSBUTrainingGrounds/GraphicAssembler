@@ -1,10 +1,11 @@
+import os.path
 from typing import Any, Callable
 
 from PIL.Image import Image as ImageType
 from PyQt6.QtCore import QTimer
-from PyQt6.QtWidgets import QPushButton
+from PyQt6.QtWidgets import QPushButton, QFileDialog
 
-from graphics.app.ThumbnailGenerate import save_image
+from graphics.utils.SettingsManager import settings_manager
 from graphics.utils.Types import ThumbnailData, Top8Data
 
 
@@ -13,12 +14,10 @@ class SaveImageButton(QPushButton):
             self,
             data: ThumbnailData | Top8Data,
             generate_img_fn: Callable[[Any], ImageType],
-            img_name: str,
     ) -> None:
         super().__init__()
         self.data = data
         self.generate_img_fn = generate_img_fn
-        self.img_name = img_name
         self.setText("Save Image")
         self.clicked.connect(self.button_handler)
 
@@ -31,7 +30,10 @@ class SaveImageButton(QPushButton):
         self.setText("Save Image")
 
     def button_handler(self) -> None:
+        output = settings_manager.get_setting_value("output_dir")
+        default_name = os.path.join(output, "graphic")
         image = self.generate_img_fn(self.data)
-        save_image(image, self.img_name)
+        path = QFileDialog.getSaveFileName(self, 'Save File', default_name, "PNG (*.png)")
+        image.save(path[0], format="PNG")
         self.setText("Saved!")
         self.timer.start(1000)

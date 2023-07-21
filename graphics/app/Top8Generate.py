@@ -146,7 +146,3 @@ def generate_top8(data: Top8Data) -> ImageType:
         canvas.alpha_composite(player_card, PLAYER_CARD_PLACING[i])
 
     return canvas
-
-
-def save_top8():
-    print("hi")

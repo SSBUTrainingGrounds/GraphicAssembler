@@ -57,7 +57,7 @@ class ThumbnailWindow(QWidget):
 
         preview = ImagePreview(data)
 
-        button = SaveImageButton(data, generate_thumbnail, "thumbnail")
+        button = SaveImageButton(data, generate_thumbnail)
 
         self.grid.addWidget(QLabel("Round"), 0, 0, 1, 3)
         self.grid.addWidget(QLabel("Tournament"), 0, 4, 1, 3)

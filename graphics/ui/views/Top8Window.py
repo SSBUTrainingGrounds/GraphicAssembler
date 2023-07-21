@@ -52,7 +52,7 @@ class Top8Window(QWidget):
         # Otherwise this would be a bit squished, while the other widgets take up too much space.
         tournament_dropdown.setMinimumWidth(200)
 
-        button = SaveImageButton(data, generate_top8, "top8")
+        button = SaveImageButton(data, generate_top8)
 
         # The top bar are the columns for the tournament, season,
         # number, date, and entrants above the preview and player sidebar.

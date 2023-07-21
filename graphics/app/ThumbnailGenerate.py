@@ -123,11 +123,3 @@ def generate_thumbnail(data: ThumbnailData) -> ImageType:
         draw_thumbnail_text("TRIALS OF SMASH", canvas, (1440, 835))
 
     return canvas
-
-
-def save_image(canvas: ImageType, name: str) -> None:
-    # Output Path
-    output_dir = settings_manager.get_setting_value("output_dir")
-    output = os.path.join(output_dir, f"{name}.png")
-
-    canvas.save(output, format="PNG")
