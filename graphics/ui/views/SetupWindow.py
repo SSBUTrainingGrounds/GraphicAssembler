@@ -25,8 +25,8 @@ class SetupWindow(QMainWindow):
         self.finish_button.setEnabled(False)
         self.finish_button.clicked.connect(self.finish_setup)
 
-        self.output_box = QLineEdit(settings_manager.get_setting_value("output_dir"))
-        self.render_box = QLineEdit(settings_manager.get_setting_value("render_dir"))
+        self.output_box = QLineEdit("Please Set Output Directory")
+        self.render_box = QLineEdit("Please Set Render Directory")
 
         self.output_box.setReadOnly(True)
         self.render_box.setReadOnly(True)
@@ -62,7 +62,7 @@ class SetupWindow(QMainWindow):
 
     def set_output_dir(self) -> None:
         settings_manager.update_setting("output_dir",
-                                        str(QFileDialog.getExistingDirectory(self, "Select Output Directory", "C:/")))
+                                        str(QFileDialog.getExistingDirectory(self, "Select Output Directory")))
         self.output_box.setText(settings_manager.get_setting_value("output_dir"))
 
         self.output_configured = True
@@ -71,7 +71,7 @@ class SetupWindow(QMainWindow):
 
     def set_render_dir(self) -> None:
         settings_manager.update_setting("render_dir",
-                                        str(QFileDialog.getExistingDirectory(self, "Select Render Directory", "C:/")))
+                                        str(QFileDialog.getExistingDirectory(self, "Select Render Directory")))
         self.render_box.setText(settings_manager.get_setting_value("render_dir"))
 
         self.render_configured = True

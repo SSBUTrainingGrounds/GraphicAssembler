@@ -8,7 +8,7 @@ from PIL import Image, ImageDraw, ImageFont
 from PIL.Image import Image as ImageType
 
 from graphics.utils.CharacterImage import generate_character_image, get_character_path
-from graphics.utils.Definitions import FONTS_DIR, OUTPUT_DIR, TOP8_DIR
+from graphics.utils.Definitions import FONTS_DIR, TOP8_DIR
 from graphics.utils.Text import biggest_font_size
 from graphics.utils.Types import Top8Data, Top8Player
 

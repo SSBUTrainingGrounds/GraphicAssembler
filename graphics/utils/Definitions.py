@@ -11,6 +11,3 @@ ASSET_DIR = os.path.join(RESOURCES_DIR, "assets")
 
 APP_DIR = os.path.join(ROOT_DIR, "app")
 UI_DIR = os.path.join(ROOT_DIR, "ui")
-
-OUTPUT_DIR = settings_manager.get_setting_value("output_dir")
-RENDERS_DIR = settings_manager.get_setting_value("render_dir")

@@ -1,5 +1,6 @@
 import json
 
+from PyQt6 import QtGui
 from PyQt6.QtGui import QIcon
 from PyQt6.QtWidgets import QMainWindow, QGridLayout, QLineEdit, QPushButton, QFileDialog, QWidget, QLabel
 
@@ -25,8 +26,8 @@ class SettingsWindow(QMainWindow):
 
         self.grid_layout = QGridLayout()
 
-        self.output_box = QLineEdit(settings_manager.get_setting_value("output_dir"))
-        self.render_box = QLineEdit(settings_manager.get_setting_value("render_dir"))
+        self.output_box = QLineEdit()
+        self.render_box = QLineEdit()
 
         self.output_box.setReadOnly(True)
         self.render_box.setReadOnly(True)
@@ -64,6 +65,12 @@ class SettingsWindow(QMainWindow):
         self.output_box.setText(settings_manager.get_setting_value("output_dir"))
 
     def set_render_dir(self) -> None:
+        existing_setting = settings_manager.get_setting_value("render_dir")
         settings_manager.update_setting("render_dir",
-                                        str(QFileDialog.getExistingDirectory(self, "Select Render Directory", "C:/")))
+                                        str(QFileDialog.getExistingDirectory(self, "Select Render Directory",
+                                                                             existing_setting)))
+        self.render_box.setText(settings_manager.get_setting_value("render_dir"))
+
+    def showEvent(self, a0: QtGui.QShowEvent) -> None:
+        self.output_box.setText(settings_manager.get_setting_value("output_dir"))
         self.render_box.setText(settings_manager.get_setting_value("render_dir"))

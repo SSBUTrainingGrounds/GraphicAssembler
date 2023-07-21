@@ -7,7 +7,8 @@ from PIL import Image, ImageDraw, ImageFont
 from PIL.Image import Image as ImageType
 
 from graphics.utils.CharacterImage import generate_character_image, get_character_path
-from graphics.utils.Definitions import FONTS_DIR, OUTPUT_DIR, THUMBNAIL_DIR
+from graphics.utils.Definitions import FONTS_DIR, THUMBNAIL_DIR
+from graphics.utils.SettingsManager import settings_manager
 from graphics.utils.Text import biggest_font_size
 from graphics.utils.Types import ThumbnailData
 
@@ -126,6 +127,7 @@ def generate_thumbnail(data: ThumbnailData) -> ImageType:
 
 def save_image(canvas: ImageType, name: str) -> None:
     # Output Path
-    output = os.path.join(OUTPUT_DIR, f"{name}.png")
+    output_dir = settings_manager.get_setting_value("output_dir")
+    output = os.path.join(output_dir, f"{name}.png")
 
     canvas.save(output, format="PNG")

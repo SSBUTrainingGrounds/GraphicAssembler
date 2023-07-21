@@ -7,35 +7,38 @@ from graphics.utils.CharacterImage import (
     get_character_path,
     resize_character,
 )
-from graphics.utils.Definitions import RENDERS_DIR
+
+from graphics.utils.SettingsManager import settings_manager
 
 
 def test_get_character_path():
-    assert get_character_path("Mario") == os.path.join(RENDERS_DIR, "Mario/01.png")
+    renders_dir = settings_manager.get_setting_value("render_dir")
+
+    assert get_character_path("Mario") == os.path.join(renders_dir, "Mario/01.png")
     assert get_character_path("Mario", "02") == os.path.join(
-        RENDERS_DIR, "Mario/02.png"
+        renders_dir, "Mario/02.png"
     )
     assert get_character_path("Incineroar", "06") == os.path.join(
-        RENDERS_DIR, "Incineroar/06.png"
+        renders_dir, "Incineroar/06.png"
     )
     assert get_character_path("Lucas", "22") == os.path.join(
-        RENDERS_DIR, "Lucas/22.png"
+        renders_dir, "Lucas/22.png"
     )
 
     assert get_character_path("Mii Brawler", "01") == os.path.join(
-        RENDERS_DIR, "Mii Brawler/01.png"
+        renders_dir, "Mii Brawler/01.png"
     )
     assert get_character_path("Mii Brawler", "02") == os.path.join(
-        RENDERS_DIR, "Mii Brawler/01.png"
+        renders_dir, "Mii Brawler/01.png"
     )
 
     assert get_character_path("None") is None
 
     assert get_character_path("Random") == os.path.join(
-        RENDERS_DIR, "Random/Random.png"
+        renders_dir, "Random/Random.png"
     )
     assert get_character_path("Random") == os.path.join(
-        RENDERS_DIR, "Random/Random.png"
+        renders_dir, "Random/Random.png"
     )
 
 

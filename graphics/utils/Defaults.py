@@ -4,8 +4,8 @@ from graphics.utils.Types import Character
 # If, for some reason, we store lists here: make a deepcopy
 
 DEFAULT_SETTINGS = {
-    "render_dir": "C:/",
-    "output_dir": "C:/",
+    "render_dir": None,
+    "output_dir": None,
     "configured": False
 }
 

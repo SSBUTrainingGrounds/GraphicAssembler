@@ -6,22 +6,23 @@ from PIL import Image
 # This is only used for type hinting
 from PIL.Image import Image as ImageType
 
-from graphics.utils.Definitions import RENDERS_DIR
+from graphics.utils.SettingsManager import settings_manager
 
 
 def get_character_path(character: str, alt: str = "01") -> Optional[str]:
     # We want an option for no character for the Top8 Graphics.
+    renders_dir = settings_manager.get_setting_value("render_dir")
     if character.lower() == "none":
         return None
 
     if character.lower() == "random":
-        return os.path.join(RENDERS_DIR, "Random/Random.png")
+        return os.path.join(renders_dir, "Random/Random.png")
 
     # The Mii Fighters only have one alt.
     if "mii" in character.lower():
         alt = "01"
 
-    return os.path.join(RENDERS_DIR, f"{character}/{alt}.png")
+    return os.path.join(renders_dir, f"{character}/{alt}.png")
 
 
 def crop_character(
