@@ -12,9 +12,9 @@ jobs:
           python_ver: '3.11'
           spec: 'build.spec'
           requirements: 'requirements.txt'
-          upload_exe_with_name: 'GraphicAssembler-${{github.ref_name}}'
-          options: --name "TG Graphic Assembler",
+          upload_exe_with_name: 'GraphicAssembler-$GITHUB_REF'
       - name: Upload Binaries to Release
         uses: svenstaro/upload-release-action@v2
         with:
           file: dist/
+          tag: $GITHUB_REF
