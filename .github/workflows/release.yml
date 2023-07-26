@@ -16,5 +16,5 @@ jobs:
       - name: Upload Binaries to Release
         uses: svenstaro/upload-release-action@v2
         with:
-          file: dist/*.exe
+          file: dist/GraphicAssembler-${{github.ref_name}}
           tag: ${{ github.ref_name }}
