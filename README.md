@@ -16,7 +16,23 @@ This is a simple to use tool to create Graphics for the Tournaments of the [SSBU
 
 ### Top 8 Graphics
 
-Not supported yet, but will be added soon.
+Opening the tool:
+
+![Screenshot of the tool in top 8 mode](./assets/default-top8.PNG)
+
+Fill in the Header information along the top.
+
+Then, open up the Player Dropdowns and fill in the player information. Some characters will not be centered correctly, use the sliders to fix this issue.
+
+![Screenshot of the tool with characters in top 8 mode](./assets/custom-top8.PNG)
+
+Each player can have up to 3 characters. Each additional image will change the default location of the character images.
+
+The twitter field is optional.
+
+After saving, you should get an image like:
+
+![Screenshot of the finished top 8 image](./assets/top8.png)
 
 ### Youtube Thumbnails
 
