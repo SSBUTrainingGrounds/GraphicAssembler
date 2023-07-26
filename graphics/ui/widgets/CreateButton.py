@@ -2,7 +2,7 @@ from PyQt6.QtCore import QTimer
 from PyQt6.QtWidgets import QPushButton
 
 from graphics.app.generate import generate_thumbnail, save_image
-from graphics.utils.types import TournamentData
+from graphics.utils.Types import TournamentData
 
 
 class CreateButton(QPushButton):

@@ -7,9 +7,9 @@ from PIL import Image, ImageDraw, ImageFont
 from PIL.Image import Image as ImageType
 
 from graphics.utils.CharacterImage import generate_character_image, get_character_path
-from graphics.utils.definitions import FONTS_DIR, OUTPUT_DIR, THUMBNAIL_DIR
+from graphics.utils.Definitions import FONTS_DIR, OUTPUT_DIR, THUMBNAIL_DIR
 from graphics.utils.Text import biggest_font_size
-from graphics.utils.types import TournamentData
+from graphics.utils.Types import TournamentData
 
 SIZE = (1920, 1080)
 CHARACTER_BOX = (960, 800)

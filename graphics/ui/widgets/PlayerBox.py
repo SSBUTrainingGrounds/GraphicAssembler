@@ -5,7 +5,7 @@ from graphics.ui.widgets.AltDropdown import AltDropdown
 from graphics.ui.widgets.CharacterDropdown import CharacterDropdown
 from graphics.ui.widgets.OffsetSlider import OffsetSlider
 from graphics.ui.widgets.PlayerTag import PlayerTag
-from graphics.utils.types import PlayerData
+from graphics.utils.Types import PlayerData
 
 
 class PlayerBox(QWidget):

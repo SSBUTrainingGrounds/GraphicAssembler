@@ -6,7 +6,7 @@ from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QLabel
 
 from graphics.app.generate import generate_thumbnail
-from graphics.utils.types import TournamentData
+from graphics.utils.Types import TournamentData
 
 
 class ImagePreview(QLabel):
