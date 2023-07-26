@@ -4,7 +4,7 @@ on:
 name: Handle Release      
 jobs:
   pyinstaller-build:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Create Executable
         uses: sayyid5416/pyinstaller@v1
@@ -17,4 +17,4 @@ jobs:
       - name: Upload Binaries to Release
         uses: svenstaro/upload-release-action@v2
         with:
-          file: /home/runner/work/GraphicAssembler/GraphicAssembler/dist/*
+          file: dist/
