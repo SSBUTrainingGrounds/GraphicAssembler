@@ -1,10 +1,10 @@
 from PyQt6.QtWidgets import QLineEdit
 
-from graphics.utils.types import PlayerData
+from graphics.utils.Types import ThumbnailPlayer, Top8Player
 
 
 class PlayerTag(QLineEdit):
-    def __init__(self, player: PlayerData) -> None:
+    def __init__(self, player: ThumbnailPlayer | Top8Player) -> None:
         super().__init__()
         self.player = player
         self.setText(player["tag"])

@@ -1,18 +1,41 @@
+from typing import Optional
+
+from PyQt6 import QtCore
 from PyQt6.QtWidgets import QComboBox
 
-from graphics.utils.types import PlayerData
+from graphics.utils.Types import ThumbnailPlayer, Top8Player
 
 
 class AltDropdown(QComboBox):
-    def __init__(self, player_data: PlayerData) -> None:
+    def __init__(
+            self,
+            player_data: ThumbnailPlayer | Top8Player,
+            character_type: Optional[str] = None,
+    ) -> None:
         super().__init__()
+
+        self.setFocusPolicy(QtCore.Qt.FocusPolicy.StrongFocus)
+
         self.player_data = player_data
+
+        self.character_type = character_type
+
+        if not self.character_type:
+            self.character_type = "character"
+
         self.addItems(["01", "02", "03", "04", "05", "06", "07", "08"])
-        self.player_data["alt"] = self.currentText()
+        if f"{self.character_type}" in player_data:
+            self.setCurrentText(player_data[f"{self.character_type}"]["alt"])  # type: ignore
         self.currentTextChanged.connect(self.get_selection)
 
     def get_selection(self, text: str) -> None:
-        self.player_data["alt"] = text
+        self.player_data[f"{self.character_type}"]["alt"] = text
 
     def reset(self) -> None:
         self.setCurrentText("01")
+
+    def wheelEvent(self, event) -> None:
+        if self.hasFocus():
+            return QComboBox.wheelEvent(self, event)
+        else:
+            event.ignore()

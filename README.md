@@ -4,7 +4,7 @@ This is a simple to use tool to create Graphics for the Tournaments of the [SSBU
 
 ## Installation
 
-1. [Install Python 3.9 or higher](https://www.python.org/downloads/)
+1. [Install Python 3.10 or higher](https://www.python.org/downloads/)
 2. [Download the Character Renders from the TrainingGrounds-Graphics repository](https://github.com/SSBUTrainingGrounds/TrainingGrounds-Graphics/tree/Character-Renders) and save them somewhere on your computer
 3. [Download the latest release of this tool](https://github.com/SSBUTrainingGrounds/GraphicAssembler/releases)
 4. Extract the downloaded zip file
